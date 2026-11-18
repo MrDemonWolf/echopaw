@@ -1,0 +1,36 @@
+# Developer ID distribution and Sparkle
+
+Plan verified against primary documentation on 2026-11-18. Release an Apple Silicon macOS 15+ app in a Developer ID-signed, notarized and stapled DMG. GitHub Releases is the proposed artifact host. Stable is the first public channel. Nightly is opt-in after we have tested channel transitions.
+
+## WolfWave reference
+
+Static source review at `2a9629d497b12b14ee4a357b6b4519749f95143d` found a tag-driven build that drafts a release, explicit inside-out code signing, notarized/stapled DMGs, a pinned Sparkle appcast generator, and in-app changelog notes embedded inline. Nightlies use a separate feed and share a build-number source with stable. Updater unit tests exist. Carry forward those patterns once EchoPaw has signed fixtures. Use an EchoPaw-specific updater key, version namespace and signing environment. [Release workflow](https://github.com/MrDemonWolf/wolfwave/blob/2a9629d497b12b14ee4a357b6b4519749f95143d/.github/workflows/build_release.yml) · [Nightly workflow](https://github.com/MrDemonWolf/wolfwave/blob/2a9629d497b12b14ee4a357b6b4519749f95143d/.github/workflows/nightly.yml) · [Appcast generator](https://github.com/MrDemonWolf/wolfwave/blob/2a9629d497b12b14ee4a357b6b4519749f95143d/scripts/generate-appcast.sh) · [Updater tests](https://github.com/MrDemonWolf/wolfwave/blob/2a9629d497b12b14ee4a357b6b4519749f95143d/apps/native/WolfWaveTests/SparkleUpdaterServiceTests.swift)
+
+## Release order
+
+1. Confirm working-name clearance or rename, a durable bundle ID, macOS deployment target, build numbering, supported release mode and channels. Keep Twitch-to-cloud features gated until relevant Twitch permissions and OpenAI desktop BYOK policy are resolved. Keep monetized speech gated until the specific voice, key and provider account rights are attested.
+2. Pin the Xcode build environment, Sparkle dependency and CI actions. Compile Release for arm64, run tests, inspect entitlements and architecture, and archive from a clean protected commit. Require human control over the first production publish and isolate release credentials from pull request workflows.
+3. Sign nested frameworks and helpers first, then the app, using Developer ID Application, hardened runtime and a secure timestamp. Verify nested signatures, bundle ID and designated requirement. If microphone features ship, verify their entitlements and purpose strings on a clean user account.
+4. Put the signed app and Applications shortcut in a final DMG. Sign the image, submit via `xcrun notarytool`, require status Accepted, keep any failure log, staple via `xcrun stapler`, and validate the stapled image. Assess the mounted app and DMG under Gatekeeper and record the final SHA-256 checksum. Keep the download’s quarantine metadata in a clean-machine smoke test. [Developer ID certificates](https://developer.apple.com/help/account/certificates/create-developer-id-certificates/) · [Packaging Mac software](https://developer.apple.com/documentation/xcode/packaging-mac-software-for-distribution) · [Customizing notarization](https://developer.apple.com/documentation/security/customizing-the-notarization-workflow)
+5. Generate the appcast with the tools from the same pinned Sparkle release as the app. Sign the final stapled DMG’s exact bytes using EdDSA. Set `SUPublicEDKey` and an HTTPS `SUFeedURL`. Put the correct versions, length, minimum OS, immutable artifact URL and concise release notes in the item. Keep automatic installation off by default, and gate installation while session activity is enabled.
+6. Choose a Sparkle release that supports `SUVerifyUpdateBeforeExtraction` and `SURequireSignedFeed`. Enable and exercise both through update and recovery fixtures before release. Use an EchoPaw-specific private signing key with restricted CI access and a tested offline backup. Require an explicit decision on feed-signature expiry behavior. If intentionally choosing permanent failure on invalid feeds, prepare a manual signed DMG recovery process. Choose feed bundle-ID binding when the pinned release supports it as a stable feature.
+7. Draft GitHub Release with signed artifacts, checksums, release notes, exact corresponding source and build instructions. Verify source availability for the distributed binary and confirm attribution. When authorized, publish the artifact before advancing the feed. Verify the final feed and enclosure as downloaded over HTTPS, including HTTP status, SHA, length, signing, and appcast display. Treat versioned binaries and release notes as immutable once advertised.
+
+All app and update assets remain planning-only until the native project can produce them. The docs site’s custom domain, DNS, release URLs and TLS remain separate release checks. [Sparkle setup](https://sparkle-project.org/documentation/) · [Sparkle customization](https://sparkle-project.org/documentation/customization/) · [Publishing an update](https://sparkle-project.org/documentation/publishing/)
+
+## Versioning and recovery
+
+Use one strictly increasing `CFBundleVersion` namespace for stable and nightly, and human-readable `CFBundleShortVersionString` for tagged releases. Start with the stable feed. If adding nightly, use separate feed URLs like WolfWave, keep participation off by default, and label its last successful build date. On leaving nightly, explain that installation remains on the current build until stable catches up. Handle any rollback as a new higher build containing the repair. Take a restorable local-data backup before migrations that change the schema. Use an alternate, separately signed staging feed or lab path for update tests. Keep Developer ID and EdDSA rotation independent and rehearse recovery using Sparkle’s supported signed DMG path.
+
+## Acceptance gates
+
+| Gate | Test and evidence |
+| --- | --- |
+| Fresh install | Download DMG on a clean user account, verify Gatekeeper and ticket, install in Applications, open on macOS 15 plus current macOS, and compare to the published checksum. Record OS and Xcode/Sparkle versions. |
+| Update | Install genuine signed N−1, update to a valid N using the staging feed, relaunch and check Keychain, preferences, characters and schema migration. Test permission prompts, automatic-check preference and manual check. |
+| Feed and artifact integrity | Alter a staging DMG, appcast and notes separately. Test expired feed results, minimum-OS exclusion, same/lower build, offline, invalid URL, short download and interrupted update. Observe previous app/data still usable. |
+| Channels | Verify stable cannot see nightly and nightly switches only on opt-in. Return to stable after a higher build exists. Test just prior to adding the feature if initial release is stable only. |
+| Release notes and source | Test display in actual Sparkle UI, markdown/HTML testing on compatible pinned version, no remote JS, working release link, exact source tag, licenses, and rebuild instructions. |
+| Workflow integrity | Review minimal permissions, protected environment, pinned actions, temporary signing keychain cleanup, no secrets in logs, and publish only from trusted build inputs. |
+
+Code signing, notarization, live appcast, update installation and key rotation have no EchoPaw evidence yet. The WolfWave review establishes the reference shape.
