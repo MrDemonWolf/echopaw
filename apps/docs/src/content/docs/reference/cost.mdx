@@ -1,0 +1,18 @@
+---
+title: Cost calculator
+description: Estimate monthly dialogue and voice usage before enabling cloud responses.
+---
+
+import CostCalculator from "../../../components/CostCalculator.astro";
+
+<CostCalculator />
+
+Defaults are planning examples checked November 18, 2026. The text rates use GPT-6 Luna Standard short context with no cache hits. ElevenLabs v4 Turbo uses the listed API metered reference. The estimate excludes retries, plan minimums, included credits, taxes and any optional transcription. Your billed amount and commercial rights depend on your provider account and plan.
+
+At 300 spoken replies with 900 input tokens, 80 output tokens and 120 spoken characters each, the metered example is about **$1.48 in total**. Count OpenAI-only replies separately, and use the provider dashboard to see actual billed usage.
+
+- [OpenAI model pricing](https://developers.openai.com/api/docs/models/gpt-6-luna)
+- [ElevenLabs API rates](https://elevenlabs.io/pricing/api?v=1019)
+- [ElevenLabs plans](https://elevenlabs.io/pricing)
+
+The planned app has local daily, per-stream and monthly limits. Also set the provider controls available on your account, since other tools can spend against the same credentials.

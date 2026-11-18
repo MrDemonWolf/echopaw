@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <g id="speech-bubble" fill="#3AAEE3">
+    <path d="M321 245h382c81 0 147 66 147 147v188c0 81-66 147-147 147H495L348 816c-15 9-33-4-31-21l14-68h-10c-81 0-147-66-147-147V392c0-81 66-147 147-147Z" />
+  </g>
+</svg>

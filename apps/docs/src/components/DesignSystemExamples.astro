@@ -1,0 +1,180 @@
+---
+const palette = [
+  { name: "Navy 900", token: "--ep-navy-900", hex: "#0A1633" },
+  { name: "Navy 800", token: "--ep-navy-800", hex: "#0D2A56" },
+  { name: "Navy 700", token: "--ep-navy-700", hex: "#0D4D8C" },
+  { name: "Blue 600", token: "--ep-blue-600", hex: "#1178B8" },
+  { name: "Blue 500", token: "--ep-blue-500", hex: "#1795D2" },
+  { name: "Blue 400", token: "--ep-blue-400", hex: "#3AAEE3" },
+];
+
+const statuses = [
+  { status: "Ready", kind: "ready", body: "Audio output verified." },
+  { status: "Verifying", kind: "pending", body: "Waiting for Twitch authorization." },
+  { status: "Needs attention", kind: "error", body: "Audio device disconnected. Choose another output." },
+  { status: "Stopped", kind: "neutral", body: "Speech and chat stayed off. Resume when ready." },
+];
+---
+
+<ul class="swatches" aria-label="Brand palette">
+  {palette.map(({ name, token, hex }) => (
+    <li>
+      <span class="sample" style={`--swatch: var(${token})`} aria-hidden="true"></span>
+      <strong>{name}</strong>
+      <code>{hex}</code>
+    </li>
+  ))}
+</ul>
+
+<div class="examples" aria-label="Component appearance examples">
+  <section class="example-panel" aria-labelledby="design-controls-heading">
+    <h3 id="design-controls-heading">Actions</h3>
+    <p>Keep recovery beside the state it addresses.</p>
+    <div class="controls">
+      <span class="action primary">Test output</span>
+      <span class="action secondary">Choose another output</span>
+      <span class="action stop">Emergency stop</span>
+    </div>
+    <p class="description">Illustrations only. Try the controls in the <a href="/start/interface-preview/">Dashboard preview</a>.</p>
+  </section>
+  <section class="example-panel" aria-labelledby="design-states-heading">
+    <h3 id="design-states-heading">Status</h3>
+    <ul class="states">
+      {statuses.map(({ status, kind, body }) => (
+        <li><strong class={kind}>{status}</strong><span>{body}</span></li>
+      ))}
+    </ul>
+  </section>
+</div>
+
+<style>
+  .swatches,
+  .states {
+    list-style: none;
+    padding: 0;
+  }
+
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--ep-space-3);
+  }
+
+  .swatches li,
+  .example-panel {
+    margin: 0;
+    color: var(--ep-text);
+    background: var(--ep-surface-raised);
+    border: 1px solid var(--ep-border);
+    border-radius: var(--ep-radius-panel);
+  }
+
+  .swatches li {
+    display: grid;
+    gap: var(--ep-space-1);
+    padding: var(--ep-space-2);
+  }
+
+  .sample {
+    display: block;
+    min-height: 3.5rem;
+    border: 1px solid var(--ep-border);
+    border-radius: var(--ep-radius-control);
+    background: var(--swatch);
+  }
+
+  .swatches li code {
+    color: var(--ep-text-secondary);
+    background: none;
+  }
+
+  .examples {
+    display: grid;
+    gap: var(--ep-space-4);
+  }
+
+  .example-panel {
+    padding: var(--ep-space-4);
+  }
+
+  .example-panel h3 {
+    color: var(--ep-text);
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ep-space-2);
+  }
+
+  .action {
+    padding: var(--ep-space-2) var(--ep-space-3);
+    border: 1px solid transparent;
+    border-radius: var(--ep-radius-control);
+    font-weight: 700;
+  }
+
+  .primary {
+    color: var(--ep-action-text);
+    background: var(--ep-action-bg);
+    border-color: var(--ep-action-border);
+  }
+
+  .secondary {
+    color: var(--ep-text);
+    border-color: var(--ep-border);
+  }
+
+  .stop {
+    color: var(--ep-stop-text);
+    background: var(--ep-stop-bg);
+  }
+
+  .description {
+    color: var(--ep-text-secondary);
+  }
+
+  .description a {
+    color: var(--ep-link);
+  }
+
+  .states li {
+    display: grid;
+    grid-template-columns: minmax(0, 9rem) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--ep-space-3);
+    margin-block: var(--ep-space-2);
+  }
+
+  .states strong {
+    width: fit-content;
+    padding-inline: var(--ep-space-2);
+    border-radius: var(--ep-radius-control);
+  }
+
+  .ready {
+    color: var(--ep-ready-text);
+    background: var(--ep-ready-bg);
+  }
+
+  .pending {
+    color: var(--ep-pending-text);
+    background: var(--ep-pending-bg);
+  }
+
+  .error {
+    color: var(--ep-error-text);
+    background: var(--ep-error-bg);
+  }
+
+  @media (max-width: 24rem) {
+    .swatches {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .neutral {
+    color: var(--ep-text);
+    border: 1px solid var(--ep-border);
+  }
+</style>

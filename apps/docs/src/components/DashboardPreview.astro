@@ -1,0 +1,239 @@
+<section class="app" aria-label="EchoPaw dashboard prototype">
+  <aside aria-label="Example sidebar">
+    <strong>EchoPaw</strong>
+    <ul>
+      <li aria-current="page">Dashboard</li>
+      <li>Character</li>
+      <li>The Brain</li>
+      <li>Reactions</li>
+      <li>OBS Setup</li>
+    </ul>
+  </aside>
+  <div class="workspace">
+    <header>
+      <div><span>Private preview</span><h2>Dashboard</h2></div>
+      <button type="button" id="preview-stop" class="stop">Emergency stop</button>
+    </header>
+    <div class="stage" aria-label="Simulated speech indicator">
+      <div class="wave" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <p id="preview-status" role="status">Ready for a test reaction.</p>
+    </div>
+    <div class="actions">
+      <button type="button" id="preview-reaction">Simulate reaction</button>
+      <button type="button" id="preview-mute" aria-pressed="false">Mute speech</button>
+      <button type="button" id="preview-resume" hidden>Resume preview</button>
+    </div>
+    <dl>
+      <div><dt>Reaction mode</dt><dd>Balanced</dd></div>
+      <div><dt>Microphone</dt><dd>Off</dd></div>
+      <div><dt>Twitch</dt><dd>Disconnected</dd></div>
+    </dl>
+  </div>
+</section>
+
+<script>
+  const reaction = document.querySelector<HTMLButtonElement>("#preview-reaction");
+  const mute = document.querySelector<HTMLButtonElement>("#preview-mute");
+  const stop = document.querySelector<HTMLButtonElement>("#preview-stop");
+  const resume = document.querySelector<HTMLButtonElement>("#preview-resume");
+  const status = document.querySelector<HTMLElement>("#preview-status");
+  const stage = status?.closest<HTMLElement>(".stage");
+
+  if (reaction && mute && stop && resume && status && stage) {
+    let playback: ReturnType<typeof setTimeout> | undefined;
+    const show = (message: string, speaking = false) => {
+      status.textContent = message;
+      stage.classList.toggle("speaking", speaking);
+    };
+    const clearPlayback = () => clearTimeout(playback);
+
+    reaction.addEventListener("click", () => {
+      clearPlayback();
+      if (mute.getAttribute("aria-pressed") === "true") {
+        show("Silent reaction. Speech is muted.");
+        return;
+      }
+      show("Simulating mascot speech.", true);
+      playback = setTimeout(() => show("Test reaction finished."), 1600);
+    });
+
+    mute.addEventListener("click", () => {
+      clearPlayback();
+      const muted = mute.getAttribute("aria-pressed") !== "true";
+      mute.setAttribute("aria-pressed", String(muted));
+      show(muted ? "Speech muted." : "Speech unmuted.");
+    });
+
+    stop.addEventListener("click", () => {
+      clearPlayback();
+      mute.setAttribute("aria-pressed", "true");
+      reaction.disabled = true;
+      mute.disabled = true;
+      resume.hidden = false;
+      show("Stopped. Resume preview to restore the controls.");
+    });
+
+    resume.addEventListener("click", () => {
+      reaction.disabled = false;
+      mute.disabled = false;
+      resume.hidden = true;
+      show("Preview resumed. Speech is still muted.");
+      reaction.focus();
+    });
+  }
+</script>
+
+<style>
+  .app {
+    background: var(--sl-color-bg);
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 1.25rem;
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    margin: 1.5rem 0;
+    overflow: hidden;
+  }
+
+  aside,
+  .workspace {
+    padding: clamp(0.8rem, 3vw, 1.75rem);
+  }
+
+  aside {
+    background: var(--sl-color-bg-sidebar);
+    border-inline-end: 1px solid var(--sl-color-hairline);
+  }
+
+  strong, h2 {
+    color: var(--sl-color-white);
+  }
+
+  aside ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  aside li {
+    padding: 0.3rem 0.45rem;
+  }
+
+  aside li[aria-current] {
+    background: var(--sl-color-accent-low);
+    border-radius: 0.5rem;
+    color: var(--sl-color-accent-high);
+    font-weight: 700;
+  }
+
+  .workspace, .workspace * {
+    margin: 0;
+  }
+
+  header,
+  .actions,
+  dl {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+
+  header {
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .stage {
+    background: radial-gradient(ellipse at 50% 30%, var(--ep-navy-700), var(--ep-navy-900) 72%);
+    border-radius: 0.9rem;
+    color: var(--ep-paper);
+    min-height: 12rem;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .wave {
+    display: flex;
+    align-items: center;
+    gap: 0.37rem;
+    height: 4rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .wave i {
+    width: 0.5rem;
+    height: 1rem;
+    background: var(--ep-blue-400);
+    border-radius: 1rem;
+    transition: height var(--ep-duration-fast) ease;
+  }
+
+  .speaking i:nth-child(even) {
+    height: 2.4rem;
+  }
+
+  .speaking i:nth-child(3) {
+    height: 3.6rem;
+  }
+
+  .actions, dl {
+    margin-top: 1rem !important;
+  }
+
+  dl {
+    column-gap: 2rem;
+    font-size: 0.9rem;
+  }
+
+  dd {
+    color: var(--sl-color-white);
+    font-weight: 700;
+  }
+
+  button {
+    font: inherit;
+    font-weight: 600;
+    color: var(--ep-text);
+    background: var(--ep-surface-raised);
+    border: 1px solid var(--ep-border);
+    border-radius: var(--ep-radius-control);
+    padding: 0.4rem 0.7rem;
+  }
+
+  button[aria-pressed="true"] {
+    background: var(--ep-action-bg);
+    border-color: var(--ep-action-border);
+    color: var(--ep-action-text);
+  }
+
+  .stop {
+    background: var(--ep-stop-bg);
+    border-color: var(--ep-stop-bg);
+    color: var(--ep-stop-text);
+  }
+
+  button:disabled {
+    color: var(--ep-text-secondary);
+    background: var(--ep-surface-raised);
+  }
+
+  @media (max-width: 36rem) {
+    .app {
+      grid-template-columns: 1fr;
+    }
+
+    aside {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wave i {
+      transition: none;
+    }
+  }
+</style>

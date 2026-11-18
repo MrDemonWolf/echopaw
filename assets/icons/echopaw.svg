@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-labelledby="title">
+  <title id="title">EchoPaw icon: a paw and waveform in a speech bubble</title>
+  <defs>
+    <linearGradient id="tile" x1="0.09" y1="0" x2="0.93" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#0A1633"/>
+      <stop offset="0.56" stop-color="#0D2A56"/>
+      <stop offset="1" stop-color="#0D4D8C"/>
+    </linearGradient>
+  </defs>
+  <rect id="tile-preview" x="40" y="40" width="944" height="944" rx="218" fill="url(#tile)"/>
+  <g id="speech-bubble" fill="#3AAEE3">
+    <path d="M321 245h382c81 0 147 66 147 147v188c0 81-66 147-147 147H495L348 816c-15 9-33-4-31-21l14-68h-10c-81 0-147-66-147-147V392c0-81 66-147 147-147Z"/>
+  </g>
+  <g id="paw" fill="#0A1633">
+    <ellipse cx="402" cy="423" rx="46" ry="53" transform="rotate(-25 402 423)"/>
+    <ellipse cx="512" cy="383" rx="49" ry="57"/>
+    <ellipse cx="622" cy="423" rx="46" ry="53" transform="rotate(25 622 423)"/>
+    <path d="M386 583c12-29 38-45 64-69 24-23 38-35 62-35s38 12 62 35c26 24 52 40 64 69 14 37-11 65-46 65-27 0-48-16-80-16s-53 16-80 16c-35 0-60-28-46-65Z"/>
+  </g>
+  <path id="waveform" fill="#3AAEE3" d="M431 576a11 11 0 0 1 11-11h32l19-24a11 11 0 0 1 18 1l18 28 14-15a11 11 0 0 1 8-4h29a11 11 0 0 1 0 22h-24l-21 23a11 11 0 0 1-17-2l-18-27-12 16a11 11 0 0 1-9 4h-37a11 11 0 0 1-11-11Z"/>
+</svg>

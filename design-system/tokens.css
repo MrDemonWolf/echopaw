@@ -1,0 +1,64 @@
+:root {
+  --ep-navy-900: #0a1633;
+  --ep-navy-800: #0d2a56;
+  --ep-navy-700: #0d4d8c;
+  --ep-blue-600: #1178b8;
+  --ep-blue-500: #1795d2;
+  --ep-blue-400: #3aaee3;
+  --ep-paper: #edf4fb;
+  --ep-ink: #dce9f7;
+  --ep-font-body: "Roboto Variable", sans-serif;
+  --ep-font-heading: "Montserrat Variable", sans-serif;
+  --ep-space-1: 0.25rem;
+  --ep-space-2: 0.5rem;
+  --ep-space-3: 0.75rem;
+  --ep-space-4: 1rem;
+  --ep-space-6: 1.5rem;
+  --ep-radius-control: 0.5rem;
+  --ep-radius-panel: 1rem;
+  --ep-radius-feature: 1.5rem;
+  --ep-duration-fast: 150ms;
+  --ep-surface: var(--ep-navy-900);
+  --ep-surface-raised: #0d1c3c;
+  --ep-text: var(--ep-ink);
+  --ep-text-secondary: #a9bed8;
+  --ep-link: #a9ddf6;
+  --ep-border: #6b84a7;
+  --ep-focus: var(--ep-blue-400);
+  --ep-action-bg: var(--ep-blue-400);
+  --ep-action-text: var(--ep-navy-900);
+  --ep-action-border: var(--ep-action-bg);
+  --ep-ready-bg: #163d3e;
+  --ep-ready-text: #9fe2c8;
+  --ep-pending-bg: #463627;
+  --ep-pending-text: #f3cc84;
+  --ep-error-bg: #4c2636;
+  --ep-error-text: #ffb4bd;
+  --ep-stop-bg: var(--ep-error-text);
+  --ep-stop-text: var(--ep-navy-900);
+}
+
+:root[data-theme="light"] {
+  --ep-surface: #f5f8fc;
+  --ep-surface-raised: var(--ep-paper);
+  --ep-text: var(--ep-navy-900);
+  --ep-text-secondary: #405675;
+  --ep-link: var(--ep-navy-700);
+  --ep-border: #5e7696;
+  --ep-focus: var(--ep-navy-700);
+  --ep-action-border: var(--ep-navy-700);
+  --ep-ready-bg: #dcefe7;
+  --ep-ready-text: #155746;
+  --ep-pending-bg: #f5e9cd;
+  --ep-pending-text: #674706;
+  --ep-error-bg: #f8e2e7;
+  --ep-error-text: #802033;
+  --ep-stop-bg: var(--ep-error-text);
+  --ep-stop-text: var(--ep-paper);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ep-duration-fast: 0ms;
+  }
+}

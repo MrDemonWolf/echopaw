@@ -1,0 +1,35 @@
+---
+title: EchoPaw
+description: An open-source macOS streaming mascot for Twitch and OBS.
+template: splash
+hero:
+  title: A little co-host for your Mac
+  tagline: Bring two PNGs. Give your stream a voice. Stay in control of when it speaks.
+  actions:
+    - text: See the five-minute setup
+      link: /start/five-minute-setup/
+      icon: right-arrow
+    - text: Try the interface preview
+      link: /start/interface-preview/
+      variant: minimal
+      icon: laptop
+---
+
+import { Card, CardGrid } from "@astrojs/starlight/components";
+
+EchoPaw is a planned free, open-source macOS utility for Twitch streamers. It pairs a PNG character with Twitch events, OpenAI dialogue, ElevenLabs speech and OBS capture. You can review the setup and try the browser prototype today. Native releases are pending.
+
+<CardGrid>
+  <Card title="Bring a character" icon="puzzle">
+    Start with [two transparent PNGs](/character/images/) and preview an idle and talking pose.
+  </Card>
+  <Card title="Set up OBS" icon="seti:video">
+    Plan [separate mascot audio](/stream/obs/) and practice with a local recording.
+  </Card>
+  <Card title="Choose when it speaks" icon="shield">
+    Learn how [PackGuard](/reference/packguard/) and a bounded reaction queue protect live output.
+  </Card>
+  <Card title="Estimate provider costs" icon="setting">
+    Use the [cost calculator](/reference/cost/) before connecting paid services.
+  </Card>
+</CardGrid>

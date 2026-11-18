@@ -1,0 +1,9 @@
+.DS_Store
+node_modules/
+.astro/
+dist/
+DerivedData/
+xcuserdata/
+.env
+.env.*
+!.env.example

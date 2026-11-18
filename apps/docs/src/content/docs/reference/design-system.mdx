@@ -1,0 +1,21 @@
+---
+title: Design system
+description: EchoPaw’s colors, typography, controls, and session states.
+---
+
+import DesignSystemExamples from "../../../components/DesignSystemExamples.astro";
+
+EchoPaw uses MrDemonWolf v6 colors, Montserrat headings, and Roboto body text in branded surfaces. The native app uses familiar macOS controls, clear field labels, and visible focus.
+
+<DesignSystemExamples />
+
+## Read a state at a glance
+
+- **Ready** confirms a successful check. Preview, service connection, and live broadcast status each have separate meanings.
+- **Verifying** says what the app is waiting for. Keep Cancel available and announce completion once.
+- **Needs attention** names the issue and puts the recovery action beside it. Keep safe preview controls available.
+- **Stopped** confirms the emergency action took effect. Keep output closed until the user chooses Resume and current requirements pass.
+
+Label critical controls in text. Support light and dark appearance, Increase Contrast, Full Keyboard Access, VoiceOver, and Reduce Motion. Use state colors as reinforcement after the label.
+
+Brand navy text on bright blue measures 7.10:1. Default page text measures 16.77:1 in light appearance and 14.50:1 in dark appearance. These are design token measurements. Rendered contrast and interaction still need verification in macOS.

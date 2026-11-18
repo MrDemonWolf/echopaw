@@ -1,0 +1,86 @@
+---
+const fields = [
+  { name: "replies", label: "Spoken replies per month", value: 300, step: 1 },
+  { name: "inputTokens", label: "Input tokens per reply", value: 900, step: 1 },
+  { name: "outputTokens", label: "Output tokens per reply", value: 80, step: 1 },
+  { name: "spokenCharacters", label: "Spoken characters per reply", value: 120, step: 1 },
+  { name: "inputPrice", label: "Input USD per million tokens", value: 0.10, step: "any" },
+  { name: "outputPrice", label: "Output USD per million tokens", value: 0.50, step: "any" },
+  { name: "speechPrice", label: "TTS USD per 1,000 characters", value: 0.04, step: "any" },
+];
+---
+
+<form id="cost-calculator">
+  <fieldset>
+    <legend>Monthly usage</legend>
+    <div class="fields">
+      {fields.map(({ name, label, value, step }) => (
+        <label>{label}<input name={name} type="number" min="0" step={step} value={value} required /></label>
+      ))}
+    </div>
+    <button type="submit">Calculate estimate</button>
+    <output aria-live="polite"></output>
+  </fieldset>
+</form>
+
+<script>
+  import { estimateCost, type UsageAssumptions } from "./estimate";
+
+  const form = document.querySelector<HTMLFormElement>("#cost-calculator");
+  if (form) {
+    const output = form.querySelector("output");
+    const usd = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+    const render = () => {
+      const values = Object.fromEntries(
+        [...new FormData(form)].map(([name, value]) => [name, value === "" ? NaN : Number(value)]),
+      ) as UsageAssumptions;
+      const cost = estimateCost(values);
+      if (output) {
+        output.value = cost
+          ? `${usd.format(cost.total)} per month in metered usage. Dialogue ${usd.format(cost.dialogue)}, speech ${usd.format(cost.speech)}.`
+          : "Enter a valid number for each field.";
+      }
+    };
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      render();
+    });
+    render();
+  }
+</script>
+
+<style>
+  fieldset {
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 1rem;
+    padding: 1rem;
+  }
+
+  .fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: 0.8rem 1rem;
+  }
+
+  label {
+    display: grid;
+    gap: 0.2rem;
+    margin: 0 !important;
+  }
+
+  button {
+    background: var(--sl-color-accent-high);
+    border: 1px solid transparent;
+    border-radius: 0.65rem;
+    color: var(--sl-color-bg);
+    font: inherit;
+    font-weight: 700;
+    padding: 0.45rem 0.85rem;
+  }
+
+  output {
+    display: block;
+    font-weight: 600;
+  }
+</style>

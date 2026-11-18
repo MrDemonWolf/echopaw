@@ -1,0 +1,64 @@
+@import "../../../../design-system/tokens.css";
+
+:root {
+  --sl-font: var(--ep-font-body);
+  --sl-color-white: var(--ep-paper);
+  --sl-color-black: var(--ep-navy-900);
+  --sl-color-bg: var(--ep-surface);
+  --sl-color-text: var(--ep-text);
+  --sl-color-text-accent: var(--ep-link);
+  --sl-color-bg-nav: var(--ep-navy-900);
+  --sl-color-bg-sidebar: var(--ep-surface-raised);
+  --sl-color-accent-low: var(--ep-navy-800);
+  --sl-color-accent: var(--ep-blue-500);
+  --sl-color-accent-high: var(--ep-link);
+}
+
+:root[data-theme="light"] {
+  --sl-color-black: var(--ep-paper);
+  --sl-color-white: var(--ep-navy-900);
+  --sl-color-bg: var(--ep-surface);
+  --sl-color-text: var(--ep-text);
+  --sl-color-text-accent: var(--ep-link);
+  --sl-color-bg-nav: var(--ep-paper);
+  --sl-color-bg-sidebar: var(--ep-surface-raised);
+  --sl-color-accent-low: #dbeaf8;
+  --sl-color-accent: var(--ep-navy-700);
+  --sl-color-accent-high: var(--ep-navy-800);
+}
+
+h1, h2, h3, h4, .site-title, legend {
+  font-family: var(--ep-font-heading);
+}
+
+.hero {
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: var(--ep-radius-feature);
+  padding: clamp(1.5rem, 5vw, 4rem) !important;
+  background: radial-gradient(ellipse at 90% 0%, var(--sl-color-accent-low), transparent 70%);
+}
+
+.hero h1 {
+  max-width: 19ch;
+  font-size: clamp(2.25rem, 6vw, 4.25rem);
+  letter-spacing: -0.055em;
+}
+
+.card, .starlight-aside {
+  border-radius: var(--ep-radius-panel);
+}
+
+input[type="number"] {
+  width: 100%;
+  border: 1px solid var(--ep-border);
+  border-radius: var(--ep-radius-control);
+  background: var(--sl-color-bg);
+  color: var(--sl-color-text);
+  font: inherit;
+  padding: 0.35rem 0.6rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ep-focus);
+  outline-offset: 3px;
+}
