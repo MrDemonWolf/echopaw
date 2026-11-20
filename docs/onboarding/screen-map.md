@@ -6,7 +6,7 @@ The editing layout draws on a central canvas with playback controls and separate
 
 ## Future destinations
 
-Proposed SwiftUI layout reviewed against Apple’s guidance on 2026-11-18. Use one main `NavigationSplitView`, familiar toolbar commands and a normal Mac window. Group the sidebar by task. Put appearance, shortcuts and updates in the standard Settings window, reachable through **EchoPaw > Settings**. An optional menu bar item mirrors important actions and opens Dashboard. The separate OBS output window shows the character content only. [Interactive Dashboard prototype](../../apps/docs/src/content/docs/start/interface-preview.mdx)
+Proposed SwiftUI layout reviewed against Apple’s guidance on 2026-11-18. Use one main `NavigationSplitView`, familiar toolbar commands and a normal Mac window. Group the sidebar by task. Keep Audio & capture, Microphone, API Keys, Twitch and General in the Settings section of the main sidebar. **EchoPaw > Settings** opens that workspace. An optional menu bar item mirrors important actions and opens Dashboard. The separate OBS output window shows the character content only. [Interactive Dashboard prototype](../../apps/docs/src/content/docs/start/interface-preview.mdx)
 
 ```text
 ╭──────────────────────────────────────────────────────────────────╮

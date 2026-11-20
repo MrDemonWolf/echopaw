@@ -11,6 +11,7 @@ struct EchoPawApp: App {
     @State private var mic: LocalMicrophone
     @State private var providerKeys: ProviderKeys
     @State private var twitch: TwitchConnections
+    @State private var destination = WorkspacePage.dashboard
 
     init() {
         BrandType.registerFonts()
@@ -51,8 +52,11 @@ struct EchoPawApp: App {
     }
 
     var body: some Scene {
-        Window("EchoPaw", id: "dashboard") {
-            DashboardView(session: session, mic: mic).preferredColorScheme(scheme)
+        Window("EchoPaw", id: DashboardView.windowID) {
+            DashboardView(session: session, mic: mic, destination: $destination)
+                .preferredColorScheme(scheme)
+                .environment(providerKeys)
+                .environment(twitch)
                 .modifier(OfferSetupGuide())
                 .windowFullScreenBehavior(.disabled)
         }
@@ -60,6 +64,9 @@ struct EchoPawApp: App {
         .defaultSize(width: 940, height: 710)
         .defaultLaunchBehavior(.presented)
         .commands {
+            CommandGroup(replacing: .appSettings) {
+                OpenWorkspaceSettingsButton(destination: $destination)
+            }
             CommandGroup(after: .help) {
                 OpenSetupGuideButton()
             }
@@ -93,7 +100,7 @@ struct EchoPawApp: App {
         }
 
         Window("Setup Guide", id: SetupGuide.windowID) {
-            SetupGuide(session: session)
+            SetupGuide(session: session, destination: $destination)
                 .preferredColorScheme(scheme)
                 .windowFullScreenBehavior(.disabled)
         }
@@ -101,13 +108,6 @@ struct EchoPawApp: App {
         .defaultSize(width: 560, height: 420)
         .defaultLaunchBehavior(.suppressed)
         .restorationBehavior(.disabled)
-
-        Settings {
-            PreferencesView(session: session, mic: mic).preferredColorScheme(scheme)
-                .environment(providerKeys)
-                .environment(twitch)
-                .windowFullScreenBehavior(.disabled)
-        }
 
         #if DEBUG
         Window("Component Gallery", id: "component-gallery") {
@@ -125,13 +125,28 @@ struct EchoPawApp: App {
     }
 }
 
+private struct OpenWorkspaceSettingsButton: View {
+    @Environment(\.openWindow) private var openWindow
+    @Binding var destination: WorkspacePage
+
+    var body: some View {
+        Button("Settings…") {
+            if !WorkspacePage.settings.contains(destination) {
+                destination = .general
+            }
+            openWindow(id: DashboardView.windowID)
+        }
+        .keyboardShortcut(",", modifiers: .command)
+    }
+}
+
 private struct PreviewMenu: View {
     @Environment(\.openWindow) private var openWindow
     let session: PreviewSession
 
     var body: some View {
         Button("Open EchoPaw") {
-            openWindow(id: "dashboard")
+            openWindow(id: DashboardView.windowID)
             NSApp.activate()
         }
         OpenSetupGuideButton()

@@ -1,48 +1,39 @@
 import SwiftUI
 
-struct PreferencesView: View {
+struct AudioPreferences: View {
     @Bindable var session: PreviewSession
-    let mic: LocalMicrophone
-    @AppStorage("preferencesTab") private var tab = "audio"
+
+    var body: some View {
+        Form {
+            Section("Playback") {
+                DevicePicker(audio: session.audio)
+                Slider(value: Binding(get: { session.audio.volume }, set: { session.audio.volume = $0 }), in: 0...1) {
+                    Text("Volume")
+                }
+                if let error = session.audio.lastError {
+                    Label(error, systemImage: "exclamationmark.triangle")
+                }
+            }
+            Section("OBS mascot window") {
+                Toggle("Use green screen", isOn: $session.usesChromaKey)
+                Text("Choose EchoPaw Mascot in OBS Window Capture.")
+                    .font(.callout).foregroundStyle(.secondary)
+            }
+        }
+    }
+}
+
+struct GeneralPreferences: View {
     @AppStorage("windowAppearance") private var appearance = "system"
 
     var body: some View {
-        TabView(selection: $tab) {
-            Form {
-                Section("Playback") {
-                    DevicePicker(audio: session.audio)
-                    Slider(value: Binding(get: { session.audio.volume }, set: { session.audio.volume = $0 }), in: 0...1) {
-                        Text("Volume")
-                    }
-                    if let error = session.audio.lastError {
-                        Label(error, systemImage: "exclamationmark.triangle")
-                    }
-                }
-                Section("OBS mascot window") {
-                    Toggle("Use green screen", isOn: $session.usesChromaKey)
-                    Text("Choose EchoPaw Mascot in OBS Window Capture.")
-                        .font(.callout).foregroundStyle(.secondary)
-                }
+        Form {
+            Picker("Appearance", selection: $appearance) {
+                Text("System").tag("system")
+                Text("Light").tag("light")
+                Text("Dark").tag("dark")
             }
-            .tabItem { Label("Audio & capture", systemImage: "speaker.wave.2") }.tag("audio")
-
-            Form { MicrophonePreferences(mic: mic, stopped: session.isStopped) }
-                .tabItem { Label("Microphone", systemImage: "mic") }.tag("mic")
-            ProviderPreferences()
-                .tabItem { Label("API Keys", systemImage: "key") }.tag("privacy")
-            TwitchPreferences()
-                .tabItem { Label("Twitch", systemImage: "bubble.left.and.bubble.right") }.tag("twitch")
-            Form {
-                Picker("Appearance", selection: $appearance) {
-                    Text("System").tag("system")
-                    Text("Light").tag("light")
-                    Text("Dark").tag("dark")
-                }
-            }
-            .tabItem { Label("General", systemImage: "gearshape") }.tag("general")
         }
-        .formStyle(.grouped)
-        .frame(width: 560, height: 450)
     }
 }
 

@@ -25,10 +25,10 @@ struct SetupGuide: View {
     }
 
     let session: PreviewSession
+    @Binding var destination: WorkspacePage
     @AppStorage("setupGuideStep") private var step = Step.rehearsal
-    @AppStorage("preferencesTab") private var preferencesTab = "audio"
     @Environment(\.dismissWindow) private var dismissWindow
-    @Environment(\.openSettings) private var openSettings
+    @Environment(\.openWindow) private var openWindow
 
     private var progressLabel: String { "Step \(step.rawValue + 1) of \(Step.allCases.count)" }
 
@@ -130,7 +130,7 @@ struct SetupGuide: View {
                 Text("API keys").font(.headline)
                 Text("Test your OpenAI or ElevenLabs key before saving it to this Mac’s Keychain.")
                     .foregroundStyle(.secondary)
-                Button("Open API Keys settings") { showSettings("privacy") }
+                Button("Open API Keys settings") { showSettings(.apiKeys) }
             }
         }
     }
@@ -153,14 +153,14 @@ struct SetupGuide: View {
         } else if !session.audio.isSelectedOutputAvailable {
             Label("Output unavailable", systemImage: "speaker.slash").font(.callout)
             if step == .obs {
-                Button("Choose audio output") { showSettings("audio") }
+                Button("Choose audio output") { showSettings(.audio) }
             }
         }
     }
 
-    private func showSettings(_ tab: String) {
-        preferencesTab = tab
-        openSettings()
+    private func showSettings(_ page: WorkspacePage) {
+        destination = page
+        openWindow(id: DashboardView.windowID)
     }
 
     private func closeGuide() {

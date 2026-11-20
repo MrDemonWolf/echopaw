@@ -1,16 +1,36 @@
 import SwiftUI
 
-private enum Destination: String, CaseIterable {
+enum WorkspacePage: String {
     case dashboard = "Dashboard"
     case character = "Character"
-    var symbol: String { self == .dashboard ? "rectangle.grid.2x2" : "pawprint" }
+    case audio = "Audio & capture"
+    case microphone = "Microphone"
+    case apiKeys = "API Keys"
+    case twitch = "Twitch"
+    case general = "General"
+
+    static let settings: [Self] = [.audio, .microphone, .apiKeys, .twitch, .general]
+
+    var symbol: String {
+        switch self {
+        case .dashboard: "rectangle.grid.2x2"
+        case .character: "pawprint"
+        case .audio: "speaker.wave.2"
+        case .microphone: "mic"
+        case .apiKeys: "key"
+        case .twitch: "bubble.left.and.bubble.right"
+        case .general: "gearshape"
+        }
+    }
 }
 
 struct DashboardView: View {
+    static let windowID = "dashboard"
+
     let session: PreviewSession
     let mic: LocalMicrophone
+    @Binding var destination: WorkspacePage
     @Environment(\.openWindow) private var openWindow
-    @SceneStorage("workspaceDestination") private var destination = Destination.dashboard
     @SceneStorage("characterInspector") private var inspector = true
 
     var body: some View {
@@ -23,25 +43,37 @@ struct DashboardView: View {
                         .resizable().frame(width: 26, height: 26).accessibilityHidden(true)
                 }
                 .padding(EP.space4)
-                List(Destination.allCases, id: \.self, selection: $destination) { page in
-                    Label(page.rawValue, systemImage: page.symbol).tag(page)
+                List(selection: $destination) {
+                    pageLink(.dashboard)
+                    pageLink(.character)
+                    Section("Settings") {
+                        ForEach(WorkspacePage.settings, id: \.self) { page in
+                            pageLink(page)
+                        }
+                    }
                 }
                 .listStyle(.sidebar)
                 Divider()
-                VStack(alignment: .leading, spacing: EP.space2) {
-                    Button("Setup Guide", systemImage: "checklist") { openWindow(id: SetupGuide.windowID) }
-                    SettingsLink { Label("Settings", systemImage: "gearshape") }
-                }
-                .padding(EP.space4)
+                Button("Setup Guide", systemImage: "checklist") { openWindow(id: SetupGuide.windowID) }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(EP.space4)
             }
             .navigationSplitViewColumnWidth(min: 158, ideal: EP.sidebarWidth, max: 230)
         } detail: {
             Group {
                 switch destination {
-                case .dashboard: SessionDashboard(session: session)
+                case .dashboard:
+                    SessionDashboard(session: session) { destination = .audio }
                 case .character: CharacterView(session: session, inspector: $inspector)
+                case .audio: AudioPreferences(session: session)
+                case .microphone:
+                    Form { MicrophonePreferences(mic: mic, stopped: session.isStopped) }
+                case .apiKeys: ProviderPreferences()
+                case .twitch: TwitchPreferences()
+                case .general: GeneralPreferences()
                 }
             }
+            .formStyle(.grouped)
             .navigationTitle(destination.rawValue)
             .toolbar {
                 ToolbarItemGroup(placement: .primaryAction) {
@@ -69,22 +101,31 @@ struct DashboardView: View {
             if stopped { AccessibilityNotification.Announcement("Stopped. Resume preview when ready.").post() }
         }
     }
+
+    private func pageLink(_ page: WorkspacePage) -> some View {
+        Label(page.rawValue, systemImage: page.symbol).tag(page)
+    }
 }
 
 private struct SessionDashboard: View {
     let session: PreviewSession
+    let chooseOutput: () -> Void
 
     var body: some View {
         VStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: EP.space1) {
-                Text(session.character?.name ?? "Mascot preview")
-                    .font(BrandType.heading)
-                    .accessibilityAddTraits(.isHeader)
-                Label(session.isStopped ? "Rehearsal stopped" : "Offline rehearsal",
-                      systemImage: session.isStopped ? "stop.circle" : "headphones")
-                    .font(.callout).foregroundStyle(.secondary)
+            HStack {
+                VStack(alignment: .leading, spacing: EP.space1) {
+                    Text(session.character?.name ?? "Mascot preview")
+                        .font(BrandType.heading)
+                        .accessibilityAddTraits(.isHeader)
+                    Label(session.isStopped ? "Rehearsal stopped" : "Offline rehearsal",
+                          systemImage: session.isStopped ? "stop.circle" : "headphones")
+                        .font(.callout).foregroundStyle(.secondary)
+                }
+                Spacer(minLength: EP.space2)
+                Button("Choose output…", action: chooseOutput)
+                    .accessibilityLabel("Open audio settings")
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, EP.space4)
             .padding(.vertical, EP.space2)
 
@@ -155,8 +196,6 @@ struct SessionControls: View {
 }
 
 private struct AudioDestination: View {
-    @Environment(\.openSettings) private var openSettings
-    @AppStorage("preferencesTab") private var preferencesTab = "audio"
     let session: PreviewSession
 
     var body: some View {
@@ -171,9 +210,7 @@ private struct AudioDestination: View {
                     Label(error, systemImage: "exclamationmark.triangle").font(.callout)
                 }
             }
-            Spacer()
-            Button("Choose output…") { preferencesTab = "audio"; openSettings() }
-                .accessibilityLabel("Open audio settings")
+            Spacer(minLength: 0)
         }
     }
 }

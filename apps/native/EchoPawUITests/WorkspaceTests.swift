@@ -7,7 +7,16 @@ final class WorkspaceTests: XCTestCase {
         app.launchEnvironment["ECHOPAW_CONNECTION_TEST_ID"] = UUID().uuidString
         app.launchArguments = ["-useSampleCharacter", "YES", "-blinkAutomatically", "NO", "-ApplePersistenceIgnoreState", "YES", "-setupGuideOffered", "YES"]
         app.launch()
-        let sidebar = app.outlines.firstMatch
+        let window = app.windows["dashboard"]
+        let sidebar = window.outlines.firstMatch
+        sidebar.staticTexts["Dashboard"].click()
+        app.buttons["Open audio settings"].click()
+        XCTAssertEqual(window.title, "Audio & capture")
+        app.typeKey(",", modifierFlags: .command)
+        XCTAssertEqual(window.title, "Audio & capture")
+        sidebar.staticTexts["Dashboard"].click()
+        app.typeKey(",", modifierFlags: .command)
+        XCTAssertEqual(window.title, "General")
         sidebar.staticTexts["Dashboard"].click()
         app.menuBars.menuBarItems["Character"].click()
         XCTAssertTrue(app.menuItems["Preview blink"].exists)
@@ -45,9 +54,8 @@ final class WorkspaceTests: XCTestCase {
     func testAccountPreferencesAndLocalKeyLifecycle() {
         let app = XCUIApplication()
         app.launchEnvironment["ECHOPAW_CONNECTION_TEST_ID"] = UUID().uuidString
-        app.launchArguments = ["-preferencesTab", "privacy"]
         app.launch()
-        openSettings("API Keys", in: app)
+        openSidebarPage("API Keys", in: app)
         let add = app.buttons["Add OpenAI key"]
         XCTAssertTrue(add.waitForExistence(timeout: 5))
         add.click()
@@ -79,13 +87,10 @@ final class WorkspaceTests: XCTestCase {
         XCTAssertTrue(add.waitForExistence(timeout: 5))
         app.terminate()
         app.launch()
-        openSettings("API Keys", in: app)
+        openSidebarPage("API Keys", in: app)
         XCTAssertTrue(add.waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["Add ElevenLabs key"].exists)
-        app.terminate()
-        app.launchArguments = ["-preferencesTab", "twitch"]
-        app.launch()
-        openSettings("Twitch", in: app)
+        openSidebarPage("Twitch", in: app)
         XCTAssertFalse(app.buttons["Connect broadcaster"].isEnabled)
         XCTAssertFalse(app.buttons["Connect bot"].isEnabled)
         XCTAssertTrue(app.textFields["Public client ID"].exists)
@@ -114,6 +119,8 @@ final class WorkspaceTests: XCTestCase {
         guide.buttons["Skip OBS"].click()
         XCTAssertTrue(guide.buttons["Open API Keys settings"].exists)
         XCTAssertFalse(guide.buttons["Open Twitch settings"].exists)
+        guide.buttons["Open API Keys settings"].click()
+        XCTAssertTrue(app.windows["dashboard"].buttons["Add OpenAI key"].waitForExistence(timeout: 5))
         guide.buttons["Done"].click()
     }
 
@@ -177,11 +184,9 @@ final class WorkspaceTests: XCTestCase {
         }
     }
 
-    private func openSettings(_ title: String, in app: XCUIApplication) {
-        app.activate()
-        if !app.windows[title].exists {
-            app.typeKey(",", modifierFlags: .command)
-        }
-        XCTAssertTrue(app.windows[title].waitForExistence(timeout: 5))
+    private func openSidebarPage(_ title: String, in app: XCUIApplication) {
+        let row = app.windows["dashboard"].outlines.firstMatch.staticTexts[title]
+        XCTAssertTrue(row.waitForExistence(timeout: 5))
+        row.click()
     }
 }
