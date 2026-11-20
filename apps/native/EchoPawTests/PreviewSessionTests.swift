@@ -55,7 +55,7 @@ struct PreviewSessionTests {
 
         session.emergencyStop()
         session.toggleMute()
-        session.testOutput()
+        session.toggleTestOutput()
         #expect(session.isStopped)
         #expect(session.isMuted)
         #expect(!session.audio.isPlaying)

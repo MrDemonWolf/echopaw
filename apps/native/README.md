@@ -12,12 +12,12 @@ With full Xcode selected, run from the repository root:
 
 The script builds and opens the ad hoc-signed Debug app. If a previous build is open, quit it before rerunning the script to try the new binary.
 
-1. Start with the bundled sample or select **Import character…** and choose a folder containing two identically sized static PNGs named `idle.png` and `talking.png`. Add aligned `blinking.png` and `talking-blinking.png` for optional blinking. EchoPaw keeps one local imported character. A successful reimport replaces the stored images together.
-2. Choose **System Default** or an explicit **Device**, set the volume, then select **Test output**. The mascot uses its talking pose during playback.
-3. Select **Show mascot window** for the dedicated **EchoPaw Mascot** capture window. Turn on **Use green screen** to try OBS's Chroma Key filter.
+1. Start with the bundled blue wolf or open the Setup inspector and select **Import character…**. Choose a folder containing two identically sized static PNGs named `idle.png` and `talking.png`. Add aligned `blinking.png` and `talking-blinking.png` for optional blinking. EchoPaw keeps one local imported character. A successful reimport replaces the stored images together.
+2. Choose **System Default** or an explicit **Device** in Setup, set the volume, then select **Test output** below the stage. The mascot uses its talking pose during playback. **Stop test** ends the sound and leaves preview ready to play again.
+3. Select **Show mascot window** in the toolbar for the dedicated **EchoPaw Mascot** capture window. Turn on **Use green screen** in Setup to try OBS's Chroma Key filter.
 4. Select **Emergency stop** to stop the clip and latch mute. **Resume preview** restores the controls. Unmute explicitly before testing audio again.
 
-The sample uses four original blue radio-host poses. **Auto-blink** controls the short, irregular blink. macOS Reduce Motion pauses it.
+The blue wolf has four aligned poses. **Auto-blink** controls the short, irregular blink. macOS Reduce Motion pauses it. Show or hide Setup using the toolbar or Control-Command-I.
 
 The preview uses a local test sound and does not request microphone or screen capture access. A connected OBS scene can still capture its window or sound. Rehearse in a local recording.
 

@@ -43,6 +43,10 @@ final class PreviewSession {
         character != nil && !isStopped && !isMuted && !audio.isPlaying && audio.isSelectedOutputAvailable
     }
 
+    var canControlTestOutput: Bool { audio.isPlaying || canTestOutput }
+    var testOutputActionTitle: String { audio.isPlaying ? "Stop test" : "Test output" }
+    var captureActionTitle: String { isCaptureVisible ? "Hide mascot window" : "Show mascot window" }
+
     var image: NSImage? {
         character?.image(isTalking: audio.isPlaying, isBlinking: isBlinking)
     }
@@ -103,9 +107,12 @@ final class PreviewSession {
         }
     }
 
-    func testOutput() {
-        guard canTestOutput else { return }
-        audio.playTest()
+    func toggleTestOutput() {
+        if audio.isPlaying {
+            audio.stop()
+        } else if canTestOutput {
+            audio.playTest()
+        }
     }
 
     func toggleMute() {

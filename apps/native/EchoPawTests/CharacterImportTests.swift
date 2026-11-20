@@ -8,7 +8,7 @@ import UniformTypeIdentifiers
 struct CharacterImportTests {
     @Test func loadsBundledSample() throws {
         let pack = try CharacterPack.sample()
-        #expect(pack.name == "EchoPaw sample")
+        #expect(pack.name == "Blue wolf")
         #expect(pack.idle.size == NSSize(width: 512, height: 512))
         #expect(pack.talking.size == pack.idle.size)
         let blinking = try #require(pack.blinking)

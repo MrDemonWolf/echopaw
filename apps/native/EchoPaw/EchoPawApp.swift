@@ -11,14 +11,15 @@ struct EchoPawApp: App {
         }
         .defaultSize(width: 950, height: 600)
         .commands {
+            InspectorCommands()
             CommandMenu("Preview") {
-                Button("Test output", action: session.testOutput)
+                Button(session.testOutputActionTitle, action: session.toggleTestOutput)
                     .keyboardShortcut("t", modifiers: [.command, .shift])
-                    .disabled(!session.canTestOutput)
+                    .disabled(!session.canControlTestOutput)
                 Button(session.isMuted ? "Unmute speech" : "Mute speech", action: session.toggleMute)
                     .keyboardShortcut("m", modifiers: [.command, .shift])
                     .disabled(session.isStopped)
-                Button(session.isCaptureVisible ? "Hide mascot window" : "Show mascot window", action: session.toggleCapture)
+                Button(session.captureActionTitle, action: session.toggleCapture)
                     .keyboardShortcut("o", modifiers: [.command, .shift])
                     .disabled(session.character == nil)
                 Divider()
@@ -45,11 +46,11 @@ private struct PreviewMenu: View {
             openWindow(id: "dashboard")
             NSApp.activate()
         }
-        Button(session.isCaptureVisible ? "Hide mascot window" : "Show mascot window", action: session.toggleCapture)
+        Button(session.captureActionTitle, action: session.toggleCapture)
             .disabled(session.character == nil)
         Divider()
-        Button("Test output", action: session.testOutput)
-            .disabled(!session.canTestOutput)
+        Button(session.testOutputActionTitle, action: session.toggleTestOutput)
+            .disabled(!session.canControlTestOutput)
         Button(session.isMuted ? "Unmute speech" : "Mute speech", action: session.toggleMute)
             .disabled(session.isStopped)
         if session.isStopped {

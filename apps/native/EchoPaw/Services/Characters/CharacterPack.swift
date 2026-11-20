@@ -29,7 +29,7 @@ struct CharacterPack {
             throw PackError.sampleUnavailable
         }
         return try Self(StoredPack(
-            name: "EchoPaw sample",
+            name: "Blue wolf",
             idle: idle,
             talking: talking,
             blinking: sampleData("blinking"),
