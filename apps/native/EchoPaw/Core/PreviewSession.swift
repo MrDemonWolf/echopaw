@@ -25,7 +25,6 @@ final class PreviewSession {
     private(set) var characterError: String?
     private(set) var isStopped = false
     private(set) var isMuted = false
-    private(set) var isAIPaused = true
     private(set) var isMicrophoneActive = false
     private(set) var isCaptureVisible = false
     private(set) var recentActivity: [String] = []
@@ -201,17 +200,10 @@ final class PreviewSession {
         record(isMuted ? "Muted speech" : "Unmuted speech")
     }
 
-    func toggleAIPause() {
-        guard !isStopped else { return }
-        isAIPaused.toggle()
-        record(isAIPaused ? "Paused automatic responses" : "Allowed automatic responses")
-    }
-
     func emergencyStop() {
         guard !isStopped else { return }
         isStopped = true
         isMuted = true
-        isAIPaused = true
         isMicrophoneActive = false
         audio.stop()
         onEmergencyStop?()

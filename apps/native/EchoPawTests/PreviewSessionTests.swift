@@ -130,16 +130,13 @@ struct PreviewSessionTests {
         #expect(fixture.preferences.string(forKey: "outputDeviceUID") == nil)
     }
 
-    @Test("Emergency stop rejects late activity, and resuming leaves speech muted and AI paused")
+    @Test("Emergency stop rejects late activity, and resuming leaves speech muted")
     func emergencyStopLatches() throws {
         let fixture = try Fixture()
         defer { fixture.cleanUp() }
         let session = fixture.session
         #expect(session.recentActivity.isEmpty)
-        #expect(session.isAIPaused)
         session.setPreviewVisible(true)
-        session.toggleAIPause()
-        #expect(!session.isAIPaused)
         #expect(!session.isMuted)
         #expect(session.canTestOutput)
         session.setMicrophoneActivity(true)
@@ -153,14 +150,12 @@ struct PreviewSessionTests {
         session.toggleCapture()
         #expect(!session.isCaptureVisible)
         session.toggleMute()
-        session.toggleAIPause()
         session.toggleTestOutput()
         session.setMicrophoneActivity(true)
         staleBlink.fire()
         #expect(shutDown)
         #expect(session.isStopped)
         #expect(session.isMuted)
-        #expect(session.isAIPaused)
         #expect(!session.audio.isPlaying)
         #expect(!session.isTalking)
         #expect(!session.isBlinking)
@@ -170,7 +165,6 @@ struct PreviewSessionTests {
         session.resume()
         #expect(!session.isStopped)
         #expect(session.isMuted)
-        #expect(session.isAIPaused)
         #expect(!session.canTestOutput)
         session.toggleMute()
         #expect(session.canTestOutput)

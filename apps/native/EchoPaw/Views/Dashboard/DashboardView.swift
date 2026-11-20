@@ -38,7 +38,7 @@ struct DashboardView: View {
         } detail: {
             Group {
                 switch destination {
-                case .dashboard: SessionDashboard(session: session, mic: mic)
+                case .dashboard: SessionDashboard(session: session)
                 case .character: CharacterView(session: session, inspector: $inspector)
                 }
             }
@@ -73,7 +73,6 @@ struct DashboardView: View {
 
 private struct SessionDashboard: View {
     let session: PreviewSession
-    let mic: LocalMicrophone
 
     var body: some View {
         GeometryReader { geometry in
@@ -92,16 +91,9 @@ private struct SessionDashboard: View {
                     SessionControls(session: session)
                     Divider()
                     AudioDestination(session: session)
-                    Divider()
-                    if !session.recentActivity.isEmpty && geometry.size.width > 590 {
-                        HStack(alignment: .top, spacing: EP.space6) {
-                            ConnectionsView()
-                            Divider()
-                            activity
-                        }
-                    } else {
-                        ConnectionsView()
-                        if !session.recentActivity.isEmpty { Divider(); activity }
+                    if !session.recentActivity.isEmpty {
+                        Divider()
+                        activity
                     }
                 }
                 .padding(EP.space6)
@@ -128,27 +120,13 @@ struct SessionControls: View {
     var body: some View {
         ViewThatFits(in: .horizontal) {
             HStack(spacing: EP.space3) {
-                actions
+                playback
                 Spacer()
                 state
             }
             VStack(alignment: .leading, spacing: EP.space2) {
-                actions
+                playback
                 state
-            }
-        }
-    }
-
-    private var actions: some View {
-        ViewThatFits(in: .horizontal) {
-            HStack(spacing: EP.space2) {
-                playback
-                ai
-            }
-            .fixedSize(horizontal: true, vertical: false)
-            VStack(alignment: .leading, spacing: EP.space2) {
-                playback
-                ai
             }
         }
     }
@@ -161,13 +139,6 @@ struct SessionControls: View {
                    action: session.toggleMute)
                 .disabled(session.isStopped)
         }
-    }
-
-    private var ai: some View {
-        Button(session.isAIPaused ? "Resume AI" : "Pause AI",
-               systemImage: session.isAIPaused ? "sparkles" : "pause.circle", action: session.toggleAIPause)
-            .disabled(session.isStopped)
-            .help("Allow or pause automatic responses when live reactions are available.")
     }
 
     private var state: some View {
@@ -197,38 +168,5 @@ private struct AudioDestination: View {
             Button("Choose output…") { preferencesTab = "audio"; openSettings() }
                 .accessibilityLabel("Open audio settings")
         }
-    }
-}
-
-struct ConnectionsView: View {
-    @Environment(ProviderKeys.self) private var keys
-    @Environment(TwitchConnections.self) private var twitch
-    @Environment(\.openSettings) private var openSettings
-    @AppStorage("preferencesTab") private var preferencesTab = "audio"
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: EP.space2) {
-            HStack {
-                Text("Connections").font(.headline).accessibilityAddTraits(.isHeader)
-                Spacer()
-                Menu("Set up") {
-                    Button("API keys…") { showSettings("privacy") }
-                    Button("Twitch accounts…") { showSettings("twitch") }
-                }
-                .fixedSize()
-                .accessibilityLabel("Set up connections")
-            }
-            ForEach(TwitchRole.allCases, id: \.self) { role in
-                StatusRow(title: "Twitch " + role.rawValue, symbol: "bubble.left.and.bubble.right", value: twitch.state(for: role).summary)
-            }
-            ForEach(KeyProvider.allCases, id: \.self) { provider in
-                StatusRow(title: provider.title, symbol: provider == .openAI ? "sparkles" : "waveform", value: keys.status(for: provider))
-            }
-        }
-    }
-
-    private func showSettings(_ tab: String) {
-        preferencesTab = tab
-        openSettings()
     }
 }

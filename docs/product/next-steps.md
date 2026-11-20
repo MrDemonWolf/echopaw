@@ -1,5 +1,7 @@
 # EchoPaw setup and product checklist
 
+See the [live co-host plan](live-cohost-plan.md) for decisions from the product interview, build order and remaining questions.
+
 Reviewed November 20, 2026. The first onboarding win is to hear the wolf and check it in OBS. Credentials and live reactions follow from that working path. The estimates below are test targets. [Competitive workflow research](../research/competitive-workflows.md)
 
 ## What to borrow from WolfWave

@@ -11,18 +11,15 @@ final class WorkspaceTests: XCTestCase {
         sidebar.staticTexts["Dashboard"].click()
         let preview = app.buttons["Preview talking"]
         XCTAssertTrue(preview.waitForExistence(timeout: 5))
-        XCTAssertTrue(app.buttons["Resume AI"].exists)
-        XCTAssertGreaterThanOrEqual(app.staticTexts.containing(NSPredicate(format: "label CONTAINS 'Not connected' OR value CONTAINS 'Not connected'")).count, 2)
+        XCTAssertFalse(app.buttons["Resume AI"].exists)
+        XCTAssertFalse(app.staticTexts["Connections"].exists)
         app.buttons["Mute speech"].click()
         XCTAssertFalse(preview.isEnabled)
-        app.buttons["Resume AI"].click()
-        XCTAssertTrue(app.buttons["Pause AI"].exists)
         app.buttons["Emergency stop"].click()
         XCTAssertFalse(app.buttons["Unmute speech"].isEnabled)
         app.buttons["Resume preview"].click()
         XCTAssertFalse(preview.isEnabled)
         app.buttons["Unmute speech"].click()
-        XCTAssertTrue(app.buttons["Resume AI"].exists)
         sidebar.staticTexts["Character"].click()
         let blink = app.buttons["Preview blink"]
         XCTAssertTrue(blink.waitForExistence(timeout: 4))
@@ -103,7 +100,7 @@ final class WorkspaceTests: XCTestCase {
         XCTAssertTrue(guide.staticTexts["Check your OBS output"].waitForExistence(timeout: 5))
         guide.buttons["Skip OBS"].click()
         XCTAssertTrue(guide.buttons["Open API Keys settings"].exists)
-        XCTAssertTrue(guide.buttons["Open Twitch settings"].exists)
+        XCTAssertFalse(guide.buttons["Open Twitch settings"].exists)
         guide.buttons["Done"].click()
     }
 

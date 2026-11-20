@@ -53,8 +53,6 @@ struct EchoPawApp: App {
     var body: some Scene {
         Window("EchoPaw", id: "dashboard") {
             DashboardView(session: session, mic: mic).preferredColorScheme(scheme)
-                .environment(providerKeys)
-                .environment(twitch)
                 .modifier(OfferSetupGuide())
                 .windowFullScreenBehavior(.disabled)
         }

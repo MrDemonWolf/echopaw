@@ -3,8 +3,6 @@ title: Five-minute setup
 description: Try the starter wolf privately on a Mac.
 ---
 
-import { Image } from "astro:assets";
-import dashboard from "../../../../../../docs/onboarding/screenshots/native-workspace.png";
 import SetupChecklist from "../../../components/SetupChecklist.astro";
 
 [Build EchoPaw from source](/develop/installation/) on an Apple Silicon Mac. You can rehearse with the starter wolf without accounts or microphone access.
@@ -13,17 +11,15 @@ import SetupChecklist from "../../../components/SetupChecklist.astro";
 
 1. Open **Setup Guide** from the sidebar or Help menu. Choose your audio output and select **Play sample line** to hear the wolf.
 2. Continue to the OBS step and record a short test scene. Confirm that you see the wolf and hear its line once. You can skip this step and return later.
-3. Connect optional accounts when ready. You can run the rehearsal entirely offline.
+3. Finish the guide or open API Keys settings for future conversation testing. You can run the rehearsal entirely offline.
 
 Use **Character > Preview blink** to see the closed-eye pose on demand. **Use starter wolf** in the inspector restores the sample after a custom import. Adjust the volume and audio device in [Audio & capture](/stream/audio/).
 
-<Image src={dashboard} alt="Native Dashboard with the blue wolf, speech controls, output selection and disconnected services." />
-
 ## Mute and stop
 
-**Mute speech** ends playback. Automatic blinking and optional microphone listening have their own controls. **Pause AI** changes whether automatic responses are allowed. The preview stays local even after you [connect Twitch](/connect/twitch-broadcaster/) or [save an API key](/connect/openai/).
+**Mute speech** ends playback. Automatic blinking and optional microphone listening have their own controls. The preview stays local even after you [connect Twitch](/connect/twitch-broadcaster/) or [save an API key](/connect/openai/).
 
-**Emergency stop** stops sound and listening, closes the capture panel and pauses AI. **Resume preview** restores controls. Choose **Unmute speech** and reopen the capture window yourself when ready.
+**Emergency stop** stops sound and listening and closes the capture panel. **Resume preview** restores controls. Choose **Unmute speech** and reopen the capture window yourself when ready.
 
 <SetupChecklist />
 

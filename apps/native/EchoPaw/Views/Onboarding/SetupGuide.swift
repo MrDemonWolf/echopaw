@@ -11,7 +11,7 @@ struct SetupGuide: View {
             switch self {
             case .rehearsal: "Try your mascot"
             case .obs: "Check your OBS output"
-            case .accounts: "Connect accounts when ready"
+            case .accounts: "Set up voice providers"
             }
         }
 
@@ -124,20 +124,13 @@ struct SetupGuide: View {
 
     private var accounts: some View {
         VStack(alignment: .leading, spacing: EP.space4) {
-            Text("You can keep rehearsing offline or set up services now. Live reactions are still in development.")
+            Text("You can keep rehearsing offline. Add provider keys when you’re ready to test conversation features as they become available.")
                 .font(BrandType.body)
             VStack(alignment: .leading, spacing: EP.space2) {
                 Text("API keys").font(.headline)
                 Text("Test your OpenAI or ElevenLabs key before saving it to this Mac’s Keychain.")
                     .foregroundStyle(.secondary)
                 Button("Open API Keys settings") { showSettings("privacy") }
-            }
-            Divider()
-            VStack(alignment: .leading, spacing: EP.space2) {
-                Text("Twitch").font(.headline)
-                Text("Use your broadcaster account for channel identity and a separate bot account for chat access.")
-                    .foregroundStyle(.secondary)
-                Button("Open Twitch settings") { showSettings("twitch") }
             }
         }
     }

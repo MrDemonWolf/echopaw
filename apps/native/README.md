@@ -15,7 +15,7 @@ Quit a running older build first. This script builds the shared Xcode scheme and
 1. In **Dashboard**, choose **Preview talking**. A bundled sound drives the mouth. **Mute speech** stops the sound while idle blinking continues.
 2. In **Character**, choose **Preview blink**. The inspector imports a folder with `idle.png` and `talking.png`. Add `blinking.png` and `talking-blinking.png` for closed eyes. Reduce Motion pauses automatic blinks.
 3. Use **Choose output…** for System Default or an explicit device. A missing selection blocks playback until you choose a usable output.
-4. **Show mascot window** opens the sprite-only panel. Choose it in OBS window capture. **Emergency stop** closes it, stops sound and mic listening, and latches speech mute and AI pause. Resume and unmute deliberately.
+4. **Show mascot window** opens the sprite-only panel. Choose it in OBS window capture. **Emergency stop** closes it, stops sound and mic listening, and latches speech mute. Resume and unmute deliberately.
 
 Optional local mic controls live in Settings. The sample needs no microphone access, provider account or network service. **Window > Show component gallery** is available in Debug.
 
