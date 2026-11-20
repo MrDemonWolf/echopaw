@@ -42,18 +42,26 @@ final class WorkspaceTests: XCTestCase {
         XCTAssertTrue(add.waitForExistence(timeout: 5))
         add.click()
         XCTAssertTrue(app.secureTextFields["Paste API key"].exists)
-        XCTAssertFalse(app.buttons["Save key"].isEnabled)
+        XCTAssertFalse(app.buttons["Check and save"].isEnabled)
         let field = app.secureTextFields["Paste API key"]
         field.click()
         field.typeText("ep-test-first")
-        app.buttons["Save key"].click()
+        app.buttons["Check and save"].click()
         let replace = app.buttons["Replace OpenAI key"]
         XCTAssertTrue(replace.waitForExistence(timeout: 5))
         replace.click()
-        XCTAssertFalse(app.buttons["Save key"].isEnabled)
+        field.click()
+        field.typeText("ep-test-rejected")
+        app.buttons["Check and save"].click()
+        let checkError = app.descendants(matching: .any).matching(identifier: "key-check-error").firstMatch
+        XCTAssertTrue(checkError.waitForExistence(timeout: 5))
+        app.buttons["Cancel"].click()
+        XCTAssertTrue(replace.waitForExistence(timeout: 5))
+        replace.click()
+        XCTAssertFalse(app.buttons["Check and save"].isEnabled)
         field.click()
         field.typeText("ep-test-replacement")
-        app.buttons["Save key"].click()
+        app.buttons["Check and save"].click()
         let remove = app.buttons["Remove OpenAI key"]
         XCTAssertTrue(remove.waitForExistence(timeout: 5))
         remove.click()
@@ -71,6 +79,32 @@ final class WorkspaceTests: XCTestCase {
         XCTAssertFalse(app.buttons["Connect broadcaster"].isEnabled)
         XCTAssertFalse(app.buttons["Connect bot"].isEnabled)
         XCTAssertTrue(app.textFields["Public client ID"].exists)
+    }
+
+    func testSetupGuideRehearsalAndResume() {
+        let app = XCUIApplication()
+        app.launchEnvironment["ECHOPAW_CONNECTION_TEST_ID"] = UUID().uuidString
+        app.launchArguments = ["-useSampleCharacter", "YES"]
+        app.launch()
+        let openGuide = app.buttons["Setup Guide"]
+        XCTAssertTrue(openGuide.waitForExistence(timeout: 5))
+        openGuide.click()
+        let guide = app.windows["Setup Guide"]
+        XCTAssertTrue(guide.waitForExistence(timeout: 5))
+        let back = guide.buttons["Back"]
+        if back.exists { back.click() }
+        if back.exists { back.click() }
+        guide.buttons["Play sample line"].click()
+        XCTAssertTrue(guide.buttons["Stop test"].exists)
+        guide.buttons["Continue"].click()
+        XCTAssertTrue(guide.staticTexts["Check your OBS output"].exists)
+        guide.buttons["Set up later"].click()
+        openGuide.click()
+        XCTAssertTrue(guide.staticTexts["Check your OBS output"].waitForExistence(timeout: 5))
+        guide.buttons["Skip OBS"].click()
+        XCTAssertTrue(guide.buttons["Open API Keys settings"].exists)
+        XCTAssertTrue(guide.buttons["Open Twitch settings"].exists)
+        guide.buttons["Done"].click()
     }
 
     private func openSettings(_ title: String, in app: XCUIApplication) {

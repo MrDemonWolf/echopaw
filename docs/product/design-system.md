@@ -13,7 +13,7 @@ The [shared stylesheet](../../design-system/tokens.css) is the source for the do
 | Spacing | Base scale 4, 8, 12, 16 and 24. Prefer 8–12 between related controls and 16–24 between sections. Measure native UI in points and the docs in rem relative to the user's base size. Let labels wrap. |
 | Corners | Approximate 8 for controls, 16 for panels and 24 for feature surfaces in branded custom UI. In SwiftUI, use the platform control style for standard controls. |
 | Motion | Use a 150 ms transition where movement explains a change. With Reduce Motion, use an instant change and keep the same state label. Stop and mute apply immediately irrespective of animation. |
-| Icon and art | Use SF Symbols for familiar native actions with readable labels. The [layered app icon direction](../../assets/icons/README.md) uses the EchoPaw bubble, paw and wave. A character pack preview reflects the user's own artwork or a clearly identified demo. |
+| Icon and art | Use SF Symbols for familiar native actions with readable labels. The [app icon](../../assets/icons/README.md) pairs wolf ears with a speech bubble. A character pack preview reflects the user's own artwork or a clearly identified demo. |
 
 ## Native semantic roles
 

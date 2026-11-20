@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <g id="paw" fill="#0A1633">
-    <ellipse cx="402" cy="423" rx="46" ry="53" transform="rotate(-25 402 423)" />
-    <ellipse cx="512" cy="383" rx="49" ry="57" />
-    <ellipse cx="622" cy="423" rx="46" ry="53" transform="rotate(25 622 423)" />
-    <path d="M386 583c12-29 38-45 64-69 24-23 38-35 62-35s38 12 62 35c26 24 52 40 64 69 14 37-11 65-46 65-27 0-48-16-80-16s-53 16-80 16c-35 0-60-28-46-65Z" />
-  </g>
-</svg>

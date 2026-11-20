@@ -12,7 +12,7 @@ struct ProviderPreferences: View {
             } header: {
                 Text("Provider keys")
             } footer: {
-                Text("Keys stay in this Mac’s Keychain. Saving a key makes no provider request. The mascot preview works offline.")
+                Text("EchoPaw checks each new key with its provider before saving it to this Mac’s Keychain. The mascot preview works offline.")
             }
         }
         .task { await keys.reload() }
@@ -40,7 +40,7 @@ private struct ProviderKeyRow: View {
                     .accessibilityLabel("Add " + provider.title + " key")
             case .unavailable:
                 Button("Try again") { Task { await keys.reload() } }
-            case .checking, .saving, .removing:
+            case .checking, .verifying, .saving, .removing:
                 ProgressView().controlSize(.small)
             }
         } label: {
@@ -70,42 +70,59 @@ private struct KeyEditor: View {
     @Environment(\.dismiss) private var dismiss
     @State private var input = ""
     @State private var error: String?
-    @State private var saving = false
+    @State private var checkTask: Task<Void, Never>?
     @FocusState private var focused: Bool
+
+    private var saving: Bool { keys.state(for: provider) == .saving }
 
     var body: some View {
         VStack(alignment: .leading, spacing: EP.space4) {
             Text(provider.title + " API key").font(.headline)
             SecureField("Paste API key", text: $input)
                 .focused($focused)
-                .disabled(saving)
+                .disabled(checkTask != nil)
+            Text("EchoPaw sends this key to \(provider.title) to check read access. This uses no text or speech generation.")
+                .font(.callout)
+                .foregroundStyle(.secondary)
             Link("Manage keys at " + provider.title, destination: provider == .openAI
                  ? URL(string: "https://platform.openai.com/api-keys")!
                  : URL(string: "https://elevenlabs.io/app/api/api-keys")!)
-            if let error { Label(error, systemImage: "exclamationmark.triangle") }
+            if let error {
+                Label(error, systemImage: "exclamationmark.triangle")
+                    .accessibilityIdentifier("key-check-error")
+            }
             HStack {
                 Spacer()
-                Button("Cancel", role: .cancel) { dismiss() }.keyboardShortcut(.cancelAction)
+                Button("Cancel", role: .cancel) {
+                    checkTask?.cancel()
+                    dismiss()
+                }
+                    .keyboardShortcut(.cancelAction)
                     .disabled(saving)
-                Button(saving ? "Saving…" : "Save key") {
-                    saving = true
-                    Task {
-                        defer { saving = false }
+                Button(saving ? "Saving…" : checkTask == nil ? "Check and save" : "Checking…") {
+                    error = nil
+                    checkTask = Task {
+                        defer { checkTask = nil }
                         do {
                             try await keys.save(input, for: provider)
                             input = ""
                             dismiss()
+                        } catch is CancellationError {
+                            return
                         } catch { self.error = error.localizedDescription }
                     }
                 }
                 .keyboardShortcut(.defaultAction)
-                .disabled(input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || saving)
+                .disabled(input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || checkTask != nil)
             }
         }
         .padding(EP.space6)
         .frame(width: 380)
         .interactiveDismissDisabled(saving)
         .onAppear { focused = true }
-        .onDisappear { input = "" }
+        .onDisappear {
+            checkTask?.cancel()
+            input = ""
+        }
     }
 }

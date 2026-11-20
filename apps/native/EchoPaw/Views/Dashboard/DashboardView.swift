@@ -9,6 +9,7 @@ private enum Destination: String, CaseIterable {
 struct DashboardView: View {
     let session: PreviewSession
     let mic: LocalMicrophone
+    @Environment(\.openWindow) private var openWindow
     @SceneStorage("workspaceDestination") private var destination = Destination.dashboard
     @SceneStorage("characterInspector") private var inspector = true
 
@@ -27,8 +28,11 @@ struct DashboardView: View {
                 }
                 .listStyle(.sidebar)
                 Divider()
-                SettingsLink { Label("Settings", systemImage: "gearshape") }
-                    .padding(EP.space4)
+                VStack(alignment: .leading, spacing: EP.space2) {
+                    Button("Setup Guide", systemImage: "checklist") { openWindow(id: SetupGuide.windowID) }
+                    SettingsLink { Label("Settings", systemImage: "gearshape") }
+                }
+                .padding(EP.space4)
             }
             .navigationSplitViewColumnWidth(min: 158, ideal: EP.sidebarWidth, max: 230)
         } detail: {

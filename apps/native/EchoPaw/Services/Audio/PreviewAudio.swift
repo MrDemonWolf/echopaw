@@ -63,7 +63,7 @@ final class PreviewAudio {
         guard isSelectedOutputAvailable else { return }
         lastError = nil
 
-        guard let url = Bundle.main.url(forResource: "PreviewTone", withExtension: "wav") else {
+        guard let url = Bundle.main.url(forResource: "PreviewLine", withExtension: "wav") else {
             lastError = "The test sound is missing from this build."
             return
         }

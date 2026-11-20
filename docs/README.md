@@ -4,7 +4,7 @@
 
 - [Decisions and open questions](product/decisions.md)
 - [Competitors](research/competitors.md) and [feasibility](research/feasibility.md)
-- [Roadmap](product/roadmap.md), [cost and performance budgets](product/budgets.md) and [development handoff](product/handoff.md)
+- [Next steps checklist](product/next-steps.md), [roadmap](product/roadmap.md), [cost and performance budgets](product/budgets.md) and [development handoff](product/handoff.md)
 - [Onboarding](onboarding/setup.md), [screen map](onboarding/screen-map.md) and [design system](product/design-system.md)
 - [Naming](research/naming.md) and [icon direction](../assets/icons/)
 

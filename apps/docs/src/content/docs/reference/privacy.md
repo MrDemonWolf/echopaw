@@ -4,7 +4,7 @@ title: Security and privacy
 
 The current offline app uses local character files and test audio. Optional microphone activity and supported keyword detection run on this Mac. Listening stops on emergency stop. Recent activity is limited to five action labels in memory.
 
-EchoPaw keeps saved OpenAI and ElevenLabs keys and each Twitch account’s OAuth tokens in macOS Keychain. The public Twitch client ID is an app preference. Saving an API key makes no network request. Twitch sign-in, token checks, refresh and revocation contact Twitch. The offline mascot needs no accounts.
+EchoPaw keeps saved OpenAI and ElevenLabs keys and each Twitch account’s OAuth tokens in macOS Keychain. **Check and save** sends the candidate key to its provider’s HTTPS API for a read-only authentication check before storing it. No chat, prompts or audio are part of that request. The public Twitch client ID is an app preference. Twitch sign-in, token checks, refresh and revocation contact Twitch. The offline mascot needs no accounts.
 
 | Feature | Data path |
 | --- | --- |

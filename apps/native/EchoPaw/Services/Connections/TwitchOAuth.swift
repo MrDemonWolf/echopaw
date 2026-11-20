@@ -46,16 +46,9 @@ struct TwitchDeviceCode: Decodable {
     let interval: Int
 }
 
-private final class TwitchRedirectPolicy: NSObject, URLSessionTaskDelegate {
-    func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse,
-                    newRequest request: URLRequest, completionHandler: @escaping @Sendable (URLRequest?) -> Void) {
-        completionHandler(nil)
-    }
-}
-
 @MainActor
 struct TwitchOAuth {
-    private static let session = URLSession(configuration: .ephemeral, delegate: TwitchRedirectPolicy(), delegateQueue: nil)
+    private static let session = URLSession(configuration: .ephemeral, delegate: CredentialRedirectPolicy(), delegateQueue: nil)
     var send: (URLRequest) async throws -> (Data, URLResponse) = { try await session.data(for: $0) }
 
     func device(clientID: String, role: TwitchRole) async throws -> TwitchDeviceCode {

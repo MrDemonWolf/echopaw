@@ -1,0 +1,44 @@
+{
+  "fill" : {
+    "solid" : "extended-srgb:0.03922,0.08627,0.20000,1.00000"
+  },
+  "groups" : [
+    {
+      "name" : "Wolf ears",
+      "layers" : [
+        {
+          "image-name" : "02-wolf-ears.svg",
+          "name" : "Wolf ears",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [0, 0]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.15
+      }
+    },
+    {
+      "name" : "Speech bubble",
+      "layers" : [
+        {
+          "image-name" : "01-speech-bubble.svg",
+          "name" : "Speech bubble",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [0, 0]
+          }
+        }
+      ],
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.25
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "squares" : "shared"
+  }
+}

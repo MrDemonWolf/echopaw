@@ -87,16 +87,20 @@ enum CredentialError: LocalizedError {
 final class ProviderKeys {
     enum State: String {
         case checking = "Checking…", absent = "No key saved", saved = "Key saved", unavailable = "Keychain unavailable"
-        case saving = "Saving…", removing = "Removing…"
+        case verifying = "Checking key…", saving = "Saving…", removing = "Removing…"
 
-        var isChanging: Bool { self == .saving || self == .removing }
+        var isChanging: Bool { self == .verifying || self == .saving || self == .removing }
     }
 
     private let store: any ConnectionSecretStore
+    private let verification: ProviderKeyVerification
     private var states: [KeyProvider: State] = [:]
     @ObservationIgnored private var currentReload = UUID()
 
-    init(store: any ConnectionSecretStore) { self.store = store }
+    init(store: any ConnectionSecretStore, verification: ProviderKeyVerification = .init()) {
+        self.store = store
+        self.verification = verification
+    }
 
     func state(for provider: KeyProvider) -> State { states[provider] ?? .checking }
     func status(for provider: KeyProvider) -> String { state(for: provider).rawValue }
@@ -117,22 +121,36 @@ final class ProviderKeys {
 
     func save(_ input: String, for provider: KeyProvider) async throws {
         let key = input.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !key.isEmpty, key.utf8.allSatisfy({ (33...126).contains($0) }) else { throw CredentialError.invalidKey }
-        try await change(provider, data: Data(key.utf8))
-    }
-
-    func remove(_ provider: KeyProvider) async throws { try await change(provider, data: nil) }
-
-    private func change(_ provider: KeyProvider, data: Data?) async throws {
-        guard states[provider]?.isChanging != true else { throw CredentialError.busy }
-        states[provider] = data == nil ? .removing : .saving
+        guard !key.isEmpty, key.utf8.count <= 4096, key.utf8.allSatisfy({ (33...126).contains($0) }) else {
+            throw CredentialError.invalidKey
+        }
+        let previous = state(for: provider)
+        guard !previous.isChanging else { throw CredentialError.busy }
+        states[provider] = .verifying
         do {
-            if let data { try await store.write(data, account: provider.account) }
-            else { try await store.remove(provider.account) }
+            try await verification.check(key, for: provider)
+            try Task.checkCancellation()
         } catch {
+            states[provider] = previous
+            throw error
+        }
+        states[provider] = .saving
+        do { try await store.write(Data(key.utf8), account: provider.account) }
+        catch {
             states[provider] = .unavailable
             throw CredentialError.keychainUnavailable
         }
-        states[provider] = data == nil ? .absent : .saved
+        states[provider] = .saved
+    }
+
+    func remove(_ provider: KeyProvider) async throws {
+        guard states[provider]?.isChanging != true else { throw CredentialError.busy }
+        states[provider] = .removing
+        do { try await store.remove(provider.account) }
+        catch {
+            states[provider] = .unavailable
+            throw CredentialError.keychainUnavailable
+        }
+        states[provider] = .absent
     }
 }

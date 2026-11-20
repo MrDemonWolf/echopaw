@@ -33,7 +33,16 @@ struct EchoPawApp: App {
         }
         #endif
         let store = KeychainSecretStore(service: service)
-        let keys = ProviderKeys(store: store)
+        #if DEBUG
+        let verification = service == nil
+            ? ProviderKeyVerification()
+            : ProviderKeyVerification { request in
+                request.value(forHTTPHeaderField: "Authorization") == "Bearer ep-test-rejected" ? 401 : 200
+            }
+        #else
+        let verification = ProviderKeyVerification()
+        #endif
+        let keys = ProviderKeys(store: store, verification: verification)
         let twitch = TwitchConnections(store: store, defaults: defaults)
         _providerKeys = State(initialValue: keys)
         _twitch = State(initialValue: twitch)
@@ -46,12 +55,16 @@ struct EchoPawApp: App {
             DashboardView(session: session, mic: mic).preferredColorScheme(scheme)
                 .environment(providerKeys)
                 .environment(twitch)
+                .modifier(OfferSetupGuide())
                 .windowFullScreenBehavior(.disabled)
         }
         .windowResizability(.contentMinSize)
         .defaultSize(width: 940, height: 710)
         .commands {
             InspectorCommands()
+            CommandGroup(after: .help) {
+                OpenSetupGuideButton()
+            }
             #if DEBUG
             CommandGroup(after: .windowList) {
                 OpenGalleryButton()
@@ -78,6 +91,16 @@ struct EchoPawApp: App {
                     .disabled(!session.isStopped)
             }
         }
+
+        Window("Setup Guide", id: SetupGuide.windowID) {
+            SetupGuide(session: session)
+                .preferredColorScheme(scheme)
+                .windowFullScreenBehavior(.disabled)
+        }
+        .windowResizability(.contentMinSize)
+        .defaultSize(width: 560, height: 420)
+        .defaultLaunchBehavior(.suppressed)
+        .restorationBehavior(.disabled)
 
         Settings {
             PreferencesView(session: session, mic: mic).preferredColorScheme(scheme)
@@ -111,6 +134,7 @@ private struct PreviewMenu: View {
             openWindow(id: "dashboard")
             NSApp.activate()
         }
+        OpenSetupGuideButton()
         Button(session.captureActionTitle, action: session.toggleCapture)
             .disabled(session.character == nil || session.isStopped)
         Divider()
