@@ -163,7 +163,7 @@ struct SessionControls: View {
         Button(session.isAIPaused ? "Resume AI" : "Pause AI",
                systemImage: session.isAIPaused ? "sparkles" : "pause.circle", action: session.toggleAIPause)
             .disabled(session.isStopped)
-            .help("Allow or pause automatic responses. Providers are disconnected.")
+            .help("Allow or pause automatic responses when live reactions are available.")
     }
 
     private var state: some View {
@@ -197,12 +197,34 @@ private struct AudioDestination: View {
 }
 
 struct ConnectionsView: View {
+    @Environment(ProviderKeys.self) private var keys
+    @Environment(TwitchConnections.self) private var twitch
+    @Environment(\.openSettings) private var openSettings
+    @AppStorage("preferencesTab") private var preferencesTab = "audio"
+
     var body: some View {
         VStack(alignment: .leading, spacing: EP.space2) {
-            Text("Connections").font(.headline).accessibilityAddTraits(.isHeader)
-            StatusRow(title: "Twitch", symbol: "bubble.left.and.bubble.right", value: "Not connected")
-            StatusRow(title: "OpenAI", symbol: "sparkles", value: "Not connected")
-            StatusRow(title: "ElevenLabs", symbol: "waveform", value: "Not connected")
+            HStack {
+                Text("Connections").font(.headline).accessibilityAddTraits(.isHeader)
+                Spacer()
+                Menu("Set up") {
+                    Button("API keys…") { showSettings("privacy") }
+                    Button("Twitch accounts…") { showSettings("twitch") }
+                }
+                .fixedSize()
+                .accessibilityLabel("Set up connections")
+            }
+            ForEach(TwitchRole.allCases, id: \.self) { role in
+                StatusRow(title: "Twitch " + role.rawValue, symbol: "bubble.left.and.bubble.right", value: twitch.state(for: role).summary)
+            }
+            ForEach(KeyProvider.allCases, id: \.self) { provider in
+                StatusRow(title: provider.title, symbol: provider == .openAI ? "sparkles" : "waveform", value: keys.status(for: provider))
+            }
         }
+    }
+
+    private func showSettings(_ tab: String) {
+        preferencesTab = tab
+        openSettings()
     }
 }

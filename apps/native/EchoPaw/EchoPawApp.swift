@@ -9,6 +9,8 @@ struct EchoPawApp: App {
     }
     @State private var session: PreviewSession
     @State private var mic: LocalMicrophone
+    @State private var providerKeys: ProviderKeys
+    @State private var twitch: TwitchConnections
 
     init() {
         BrandType.registerFonts()
@@ -18,11 +20,32 @@ struct EchoPawApp: App {
         session.onPlaybackChange = { [weak mic] in mic?.setPlaying($0) }
         _session = State(initialValue: session)
         _mic = State(initialValue: mic)
+        var service: String?
+        var defaults = UserDefaults.standard
+        #if DEBUG
+        let environment = ProcessInfo.processInfo.environment
+        let testID = environment["ECHOPAW_CONNECTION_TEST_ID"].flatMap(UUID.init(uuidString:))
+            ?? (environment["XCTestConfigurationFilePath"] == nil ? nil : UUID())
+        if let testID {
+            let suite = "com.mrdemonwolf.echopaw.tests." + testID.uuidString
+            service = suite
+            defaults = UserDefaults(suiteName: suite)!
+        }
+        #endif
+        let store = KeychainSecretStore(service: service)
+        let keys = ProviderKeys(store: store)
+        let twitch = TwitchConnections(store: store, defaults: defaults)
+        _providerKeys = State(initialValue: keys)
+        _twitch = State(initialValue: twitch)
+        twitch.restore()
+        Task { await keys.reload() }
     }
 
     var body: some Scene {
         Window("EchoPaw", id: "dashboard") {
             DashboardView(session: session, mic: mic).preferredColorScheme(scheme)
+                .environment(providerKeys)
+                .environment(twitch)
                 .windowFullScreenBehavior(.disabled)
         }
         .windowResizability(.contentMinSize)
@@ -58,6 +81,8 @@ struct EchoPawApp: App {
 
         Settings {
             PreferencesView(session: session, mic: mic).preferredColorScheme(scheme)
+                .environment(providerKeys)
+                .environment(twitch)
                 .windowFullScreenBehavior(.disabled)
         }
 

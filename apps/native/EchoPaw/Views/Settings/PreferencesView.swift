@@ -28,13 +28,10 @@ struct PreferencesView: View {
 
             Form { MicrophonePreferences(mic: mic, stopped: session.isStopped) }
                 .tabItem { Label("Microphone", systemImage: "mic") }.tag("mic")
-            Form {
-                Section("Accounts") { ConnectionsView() }
-                Section("Privacy") {
-                    Text("Preview audio and character images stay on this Mac. No account is needed.")
-                }
-            }
-            .tabItem { Label("Privacy & accounts", systemImage: "hand.raised") }.tag("privacy")
+            ProviderPreferences()
+                .tabItem { Label("API Keys", systemImage: "key") }.tag("privacy")
+            TwitchPreferences()
+                .tabItem { Label("Twitch", systemImage: "bubble.left.and.bubble.right") }.tag("twitch")
             Form {
                 Picker("Appearance", selection: $appearance) {
                     Text("System").tag("system")
@@ -45,7 +42,7 @@ struct PreferencesView: View {
             .tabItem { Label("General", systemImage: "gearshape") }.tag("general")
         }
         .formStyle(.grouped)
-        .frame(width: 510, height: 430)
+        .frame(width: 560, height: 450)
     }
 }
 
