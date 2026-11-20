@@ -4,14 +4,14 @@ title: Security and privacy
 
 The current offline app uses local character files and test audio. Optional microphone activity and supported keyword detection run on this Mac. Listening stops on emergency stop. Recent activity is limited to five action labels in memory.
 
-Future provider support plans to keep credentials in macOS Keychain and store character assets and settings locally. EchoPaw needs no hosted user account. App logs and exports are designed to exclude secrets and raw chat or microphone content.
+EchoPaw keeps saved OpenAI and ElevenLabs keys and each Twitch account’s OAuth tokens in macOS Keychain. The public Twitch client ID is an app preference. Saving an API key makes no network request. Twitch sign-in, token checks, refresh and revocation contact Twitch. The offline mascot needs no accounts.
 
-| Feature | Planned data path |
+| Feature | Data path |
 | --- | --- |
 | Offline preview | Local images and a local test sound. |
-| Twitch connection | Twitch sends authorized channel events. Those events stay local until any further processing is cleared. |
-| Cloud dialogue and moderation | Minimum approved text goes to OpenAI. |
-| Speech | Only the approved voice line and synthesis settings go to ElevenLabs. |
+| Twitch connection | Twitch verifies the selected role and returns its user ID and login. Live event delivery is pending. |
+| Cloud dialogue and moderation (planned) | Minimum approved text goes to OpenAI. |
+| Cloud speech (planned) | Only the approved voice line and synthesis settings go to ElevenLabs. |
 | Activity reactions | Audio stays on your Mac and is discarded. |
 | Keyword recognition | Local where supported. An explicitly initiated voice question may send recognized text to OpenAI after consent and required checks. Any future cloud audio transcription mode requires separate consent. |
 | Viewer memory | Off by default. Optional short local summaries require opt-in and deletion controls. |

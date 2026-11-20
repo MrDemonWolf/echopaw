@@ -1,6 +1,6 @@
 # Twitch connection and EventSub
 
-**Status** Proposed implementation contract. Provider documentation checked November 18, 2026. OAuth and live events still need validation with test accounts.
+**Status, November 20, 2026.** The native Settings screen implements public-client device authorization, Keychain storage and separate role status. Supply the public client ID in Settings. Connected-account testing is still required, including whether Twitch accepts the broadcaster’s empty scope list for the registered application. The EventSub, chat and optional scope designs below are planned.
 
 Use Twitch public-client Device Code Grant, direct EventSub WebSockets, and the Helix Send Chat Message API. The streamer identifies the channel and authorizes channel events. The separate bot account reads chat and sends optional replies. Use immutable Twitch user IDs for identity; login and display names are labels. One EchoPaw channel per installation is sufficient for the first release. [Twitch OAuth](https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/) · [Twitch Chat setup](https://dev.twitch.tv/docs/chat/authenticating/) · [Chat API](https://dev.twitch.tv/docs/api/reference/chat#send-chat-message)
 

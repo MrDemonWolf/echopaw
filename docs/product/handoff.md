@@ -19,7 +19,7 @@ An Apple Silicon streamer can privately preview a two-PNG mascot, record it in O
 
 ## Implemented offline workspace
 
-The working checkout now includes Dashboard, Character, Settings, the local wolf pack and the capture panel. Each service remains disconnected. A local permission-gated microphone can drive the mouth or detect a wake phrase. A detected phrase only shows a local confirmation. The release gates for PackGuard, provider policy and live scheduling still apply. See the [dated evidence and next hardware check](../research/native-preview-validation.md).
+The working checkout includes Dashboard, Character, Settings, the local wolf pack and the capture panel. Settings accepts Keychain-backed provider keys and separate Twitch device sign-ins. The public client ID is supplied at setup. Connecting accounts leaves live events, chat sends and paid provider calls off. A permission-gated microphone can drive the mouth or detect a local wake phrase. The release gates for PackGuard, provider policy and live scheduling still apply. See the [Twitch acceptance gates](../architecture/twitch.md) and [preview evidence](../research/native-preview-validation.md).
 
 ## First development slice
 

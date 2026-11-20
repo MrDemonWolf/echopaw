@@ -2,11 +2,20 @@
 title: Connect the Twitch broadcaster
 ---
 
-Use the account that owns the channel to authorize selected channel events. The planned sign-in opens Twitch in your browser and displays the resulting channel in EchoPaw.
+## Set the public client ID once
 
-1. Start with the live outputs paused. In **Twitch**, choose **Connect broadcaster**.
-2. In the browser, verify the channel owner before granting the listed permissions. Skip optional event features you do not need.
-3. Check the channel shown in EchoPaw and run a simulated event. Reopen the connection if authorization expires, or disconnect and retry if the browser used the wrong account.
-4. Review the event list before enabling real channel events. Twitch event data stays local unless the proposed third-party processing has been cleared.
+This source build needs a Twitch application registered as a **Public** client. Both the broadcaster and bot use its client ID. Use an EchoPaw registration you control.
 
-See [Twitch's chatbot authentication guide](https://dev.twitch.tv/docs/chat/authenticating/) and [separate bot setup](/connect/twitch-bot/).
+1. Sign in to the [Twitch developer console](https://dev.twitch.tv/console/apps) with two-factor authentication enabled. Register an application or manage an existing public client.
+2. If the registration form requests a redirect URL, Twitch’s example uses `http://localhost:3000`. Device sign-in completes on Twitch’s activation page and does not start a local web server.
+3. Copy the **Client ID**. Open **EchoPaw > Settings > Twitch**, paste it into **Public client ID** and choose **Save**. EchoPaw needs no client secret. [App registration](https://dev.twitch.tv/docs/authentication/register-app/) · [Device Code Grant](https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/#device-code-grant-flow)
+
+## Sign in as the channel owner
+
+![Twitch settings with the public client ID field and separate broadcaster and bot controls.](../../../../../../docs/onboarding/screenshots/twitch-accounts.png)
+
+1. Choose **Connect broadcaster**. EchoPaw displays a short-lived code.
+2. Choose **Open Twitch**. Check the account in your browser, enter the code if requested and approve. Only enter a code you just requested in EchoPaw.
+3. Return to Settings and look for **Connected as** with your channel login. **Cancel sign-in** ends a pending attempt. If the code expires, start again.
+
+The broadcaster sign-in requests identity only. Sign-in leaves live events, chat output and cloud replies off. To switch accounts, disconnect the saved role before connecting again. Review grants in [Twitch Connections](https://www.twitch.tv/settings/connections). [Connect the separate bot](/connect/twitch-bot/)
