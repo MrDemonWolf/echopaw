@@ -14,11 +14,12 @@ November 20, 2026. This plan consolidates the product interview. The setup guide
 
 Offer **GPT-6 Luna** by default, with **GPT-6.1 Terra** and **GPT-6.2 Sol** as choices. Maintain a single versioned catalog for display name, provider model ID, supported request options and budget metadata. Bundle the catalog and design its update path so a model swap is a catalog change, with validation before loading updates. Use the account's model list to check access, then verify the exact request parameters before marking a model usable. Persist the selected ID. If it becomes unavailable, explain why and offer a replacement. A fallback may run only if the streamer explicitly configured it and it still passes the budget and safety checks. [OpenAI model catalog](https://developers.openai.com/api/docs/models/all) · [List models](https://developers.openai.com/api/reference/resources/models/methods/list/)
 
-## Remaining product decisions
+## Approved defaults
 
-- **Approved pilot scope.** Start with streamer conversation, outfits and Stream Deck on the actual two-machine setup. Viewer controls follow in a second milestone.
-- Paid delivery. Define what viewers get when speech is delayed or the provider fails before enabling Ask EchoPaw.
-- Fallback preference. Decide whether a configured local provider can take over automatically in a stream or whether switching always requires a click.
+- Pilot on the two-machine setup with streamer conversation, outfits and Stream Deck. Viewer controls follow in a second milestone.
+- Leave automatic local fallback off by default. Offer an explicit opt-in after validating availability, safety and Stop on the Mac mini.
+- When the Ask EchoPaw description says a chat reply counts, use a substantive chat reply as fallback if speech cannot play. Flag failed delivery for streamer review when neither output works.
+- Default opted-in viewer memory to expire after 90 days of inactivity, with an adjustable retention window and earlier viewer deletion.
 
 Treat the rest as defaults to validate on the Mac mini rather than interview questions. Check mic/voice isolation, Stop during playback, half-open Twitch sessions, scoped permissions, queued-output cancellation, and duplicate or overlapping redemptions before release.
 
@@ -29,6 +30,6 @@ Treat the rest as defaults to validate on the Mac mini rather than interview que
 | The Dashboard offered AI pause and resume without a reply engine. | Removed the control and its unused session state. The emergency stop and speech mute remain. |
 | Connection status and Twitch setup competed with the local rehearsal. | Removed the connection panel from Dashboard and the Twitch step from Setup Guide. Provider keys and existing Twitch connection management remain in Settings so saved accounts can still be managed. |
 | The local mic can detect activity or a wake phrase. | The pilot still needs actual multi-turn transcription, reply generation, routed speech and cancellation. Validate those together on the Mac mini. |
-| Character import currently starts from a PNG folder. | Build direct pose selection and named outfits next. Verify a look change reuses the same OBS source. |
+| Character import currently starts from a PNG folder. | Direct idle and speaking image selection now uses the same validated import path as folders. Named outfits are next. Verify a look change reuses the same OBS source. |
 | The stop path hides the mascot window. | Verify OBS source recovery after stop before treating it as a live-ready control. The committed transparent video proof used silent sources. |
 | Stream Deck is part of the pilot but needs a local control path. | Exercise listen, stop and select outfit with the physical deck connected to the Mac mini before pilot sign-off. |

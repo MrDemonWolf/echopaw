@@ -15,10 +15,10 @@ Dashboard and Character share a resizable workspace with a 760 × 480 point cont
 
 | Component | Use and states |
 | --- | --- |
-| Preview surface | Draws just the cached pose. Transparent PNG pixels show the surrounding window surface on Dashboard, in Character and in the gallery. The separate OBS panel preserves transparency by default. Reduce Motion pauses automatic blinks. |
+| Preview surface | Draws the cached pose over an adaptive checkerboard in the app. The separate OBS panel preserves transparency by default. Reduce Motion pauses automatic blinks. |
 | Status row | Pairs a symbol and service name with readable connection text. VoiceOver reads the row together. |
-| Session controls | Play the bundled sound, mute speech or pause automatic responses. Disabled controls reflect emergency stop, mute and unavailable routes. Resume leaves speech muted and AI paused. |
+| Session controls | Play the bundled sample line and mute speech. Disabled controls reflect emergency stop, mute and unavailable routes. Resume leaves speech muted. |
 | Device picker | Uses a native menu. Keeps a disconnected device selected and shows the recovery message next to playback settings. |
-| Character inspector | Owns folder import, starter selection and optional blink settings. The two-image fallback explains missing artwork. |
+| Character inspector | Select individual idle and speaking images, import a folder, choose the starter wolf or adjust blinking. The two-image fallback explains missing artwork. |
 
 Open **Window > Show component gallery** in a Debug build for the live controls and labelled status examples. See the [usage and contrast guide](../docs/product/design-system.md). Repository organization, sidebar selection, a debug gallery, and generated-token checks follow patterns inspected in [WolfWave](https://github.com/MrDemonWolf/wolfwave/tree/2a9629d497b12b14ee4a357b6b4519749f95143d/design-system). EchoPaw supplies its own implementation, palette and artwork.

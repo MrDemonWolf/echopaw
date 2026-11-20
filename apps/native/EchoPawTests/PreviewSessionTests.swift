@@ -4,15 +4,18 @@ import Testing
 
 @MainActor
 struct PreviewSessionTests {
-    @Test("The editor preview draws only the mascot")
-    func previewPreservesTransparency() throws {
+    @Test("The editor draws alternating transparency tiles behind the mascot")
+    func previewShowsTransparencyGrid() throws {
         let fixture = try Fixture()
         defer { fixture.cleanUp() }
         let renderer = ImageRenderer(content: PreviewSurface(session: fixture.session).frame(width: 360, height: 240))
         let bitmap = try NSBitmapImageRep(cgImage: #require(renderer.cgImage))
-        #expect(bitmap.colorAt(x: 8, y: 120)?.alphaComponent == 0)
-        #expect(bitmap.colorAt(x: 352, y: 120)?.alphaComponent == 0)
+        let first = try #require(bitmap.colorAt(x: 8, y: 120))
+        let adjacent = try #require(bitmap.colorAt(x: 24, y: 120))
+        #expect(first != adjacent)
+        #expect(first == bitmap.colorAt(x: 40, y: 120))
         let center = try #require(bitmap.colorAt(x: 180, y: 120))
+        #expect(center != first && center != adjacent)
         #expect(center.alphaComponent > 0.9)
     }
 

@@ -81,6 +81,27 @@ struct CharacterPack {
             blinking: source("blinking.png"),
             talkingBlinking: source("talking-blinking.png")
         )
+        return try save(stored, storageRoot: storageRoot)
+    }
+
+    static func importImages(idle: URL, speaking: URL, storageRoot: URL? = nil) throws -> Self {
+        func source(_ url: URL) throws -> Data {
+            let hasScope = url.startAccessingSecurityScopedResource()
+            defer { if hasScope { url.stopAccessingSecurityScopedResource() } }
+            let file = open(url.path, fileFlags)
+            guard file >= 0 else { throw PackError.sourceUnavailable(url.lastPathComponent) }
+            defer { close(file) }
+            return try read(file, maximumBytes: maximumPNGBytes, name: url.lastPathComponent)
+        }
+
+        let stored = try StoredPack(
+            name: idle.deletingPathExtension().lastPathComponent,
+            idle: source(idle), talking: source(speaking), blinking: nil, talkingBlinking: nil
+        )
+        return try save(stored, storageRoot: storageRoot)
+    }
+
+    private static func save(_ stored: StoredPack, storageRoot: URL?) throws -> Self {
         let pack = try Self(stored)
         let url = try storageFile(in: storageRoot)
 

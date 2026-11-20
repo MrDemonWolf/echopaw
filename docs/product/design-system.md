@@ -62,3 +62,9 @@ Static sRGB contrast ratios are rounded to two decimal places. Native materials,
 - [ ] Confirm status, error, and selection meaning without color, sound, or animation. Rate-limit spoken status announcements and avoid announcing every meter tick.
 
 [Apple accessibility guidance](https://developer.apple.com/design/human-interface-guidelines/accessibility) · [Apple macOS design guidance](https://developer.apple.com/design/human-interface-guidelines/designing-for-macos) · [W3C contrast minimum](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html) · [W3C non-text contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html) · [Screen map](../onboarding/screen-map.md)
+
+## Rehearsal dashboard
+
+Show transparent pixels over a subtle checkerboard in the app preview with playback controls directly below it. Let the preview take the remaining window height. Dock playback and the audio destination across the full detail width, stacking them when their labels need more room. Keep recent activity collapsed until requested. Reserve the toolbar for session-wide actions.
+
+The November 20, 2026 pass used the preview and transport placement in [Riverside](https://mobbin.com/screens/5f2ce98e-e3ac-4746-a64f-b1bc76d4f1cc) and [VEED](https://mobbin.com/screens/ed45c8a5-f3a0-4fe0-a1ce-9f625a0be353), alongside the [OBS rehearsal workflow](https://obsproject.com/kb/quick-start-guide). See the [running EchoPaw dashboard](../onboarding/screenshots/rehearsal-dashboard.png).

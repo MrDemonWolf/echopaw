@@ -29,6 +29,22 @@ struct PreviewSurface: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background {
+            Canvas { context, size in
+                let tile = EP.space4
+                var checks = Path()
+                for row in 0..<Int(ceil(size.height / tile)) {
+                    for column in stride(from: row % 2, to: Int(ceil(size.width / tile)), by: 2) {
+                        checks.addRect(CGRect(x: CGFloat(column) * tile, y: CGFloat(row) * tile,
+                                              width: tile, height: tile))
+                    }
+                }
+                context.fill(checks, with: .color(.primary.opacity(0.07)))
+            }
+            .background(Color(nsColor: .windowBackgroundColor))
+            .accessibilityHidden(true)
+            .allowsHitTesting(false)
+        }
     }
 }
 

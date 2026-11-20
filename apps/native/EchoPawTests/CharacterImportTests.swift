@@ -34,6 +34,25 @@ struct CharacterImportTests {
         #expect(saved.image(isTalking: true, isBlinking: true) === saved.talking)
     }
 
+    @Test func importsIndividuallySelectedImagesAndPreservesSavedPairOnFailure() throws {
+        let files = try Folders()
+        defer { files.remove() }
+        let idle = files.source.appending(path: "quiet-wolf.png")
+        let speaking = files.source.appending(path: "speaking-wolf.png")
+        try makePNG(width: 16, at: idle)
+        try makePNG(width: 16, at: speaking)
+        _ = try CharacterPack.importImages(idle: idle, speaking: speaking, storageRoot: files.storage)
+
+        try makePNG(width: 24, at: speaking)
+        #expect(throws: (any Error).self) {
+            try CharacterPack.importImages(idle: idle, speaking: speaking, storageRoot: files.storage)
+        }
+        try FileManager.default.removeItem(at: files.source)
+        let saved = try #require(try CharacterPack.saved(storageRoot: files.storage))
+        #expect(saved.name == "quiet-wolf")
+        #expect(saved.talking.size == NSSize(width: 16, height: 16))
+    }
+
     @Test func optionalBlinkPersistsAndMissingTalkingBlinkKeepsTalkingPose() throws {
         let files = try Folders()
         defer { files.remove() }

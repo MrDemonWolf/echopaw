@@ -5,12 +5,19 @@ final class WorkspaceTests: XCTestCase {
     func testOfflinePreviewAndDeliberateResume() throws {
         let app = XCUIApplication()
         app.launchEnvironment["ECHOPAW_CONNECTION_TEST_ID"] = UUID().uuidString
-        app.launchArguments = ["-useSampleCharacter", "YES", "-blinkAutomatically", "NO"]
+        app.launchArguments = ["-useSampleCharacter", "YES", "-blinkAutomatically", "NO", "-ApplePersistenceIgnoreState", "YES", "-setupGuideOffered", "YES"]
         app.launch()
         let sidebar = app.outlines.firstMatch
         sidebar.staticTexts["Dashboard"].click()
+        app.menuBars.menuBarItems["Character"].click()
+        XCTAssertTrue(app.menuItems["Preview blink"].exists)
+        app.typeKey(.escape, modifierFlags: [])
+        app.menuBars.menuBarItems["Session"].click()
+        XCTAssertTrue(app.menuItems["Emergency stop"].exists)
+        app.typeKey(.escape, modifierFlags: [])
         let preview = app.buttons["Preview talking"]
         XCTAssertTrue(preview.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Offline rehearsal"].exists)
         XCTAssertFalse(app.buttons["Resume AI"].exists)
         XCTAssertFalse(app.staticTexts["Connections"].exists)
         app.buttons["Mute speech"].click()
@@ -23,6 +30,12 @@ final class WorkspaceTests: XCTestCase {
         sidebar.staticTexts["Character"].click()
         let blink = app.buttons["Preview blink"]
         XCTAssertTrue(blink.waitForExistence(timeout: 4))
+        if !app.buttons["Choose idle image"].exists {
+            app.buttons["Character inspector"].click()
+        }
+        for label in ["Choose idle image", "Choose speaking image", "Preview talking", "Preview blink"] {
+            XCTAssertTrue(app.buttons[label].isHittable, "\(label) should be reachable with the inspector open")
+        }
         blink.click()
         XCTAssertFalse(app.buttons["Outfit"].exists)
         XCTAssertFalse(app.buttons["Props"].exists)
@@ -102,6 +115,66 @@ final class WorkspaceTests: XCTestCase {
         XCTAssertTrue(guide.buttons["Open API Keys settings"].exists)
         XCTAssertFalse(guide.buttons["Open Twitch settings"].exists)
         guide.buttons["Done"].click()
+    }
+
+    func testCompactCharacterWorkspace() throws {
+        let fixtureFolder = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        try FileManager.default.createDirectory(at: fixtureFolder, withIntermediateDirectories: false)
+        defer { try? FileManager.default.removeItem(at: fixtureFolder) }
+        let filename = String(repeating: "long-idle-pose-", count: 10) + "final.png"
+        let fixture = fixtureFolder.appending(path: filename)
+        let sample = URL(filePath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+            .appending(path: "EchoPaw/Resources/SampleCharacter/idle.png")
+        try FileManager.default.copyItem(at: sample, to: fixture)
+
+        for appearance in ["light", "dark"] {
+            let app = XCUIApplication()
+            app.launchEnvironment["ECHOPAW_CONNECTION_TEST_ID"] = UUID().uuidString
+            app.launchArguments = [
+                "-ApplePersistenceIgnoreState", "YES", "-setupGuideOffered", "YES",
+                "-useSampleCharacter", "YES", "-windowAppearance", appearance
+            ]
+            app.launch()
+            defer { app.terminate() }
+
+            let window = app.windows["dashboard"]
+            let character = window.outlines.firstMatch.staticTexts["Character"]
+            XCTAssertTrue(character.waitForExistence(timeout: 5))
+            character.click()
+
+            let idlePicker = window.buttons["Choose idle image"]
+            if !idlePicker.exists {
+                window.buttons["Character inspector"].click()
+            }
+            XCTAssertTrue(idlePicker.waitForExistence(timeout: 5))
+
+            let corner = window.coordinate(withNormalizedOffset: CGVector(dx: 1, dy: 1))
+                .withOffset(CGVector(dx: -3, dy: -3))
+            corner.click(forDuration: 0.1, thenDragTo: corner.withOffset(CGVector(dx: -350, dy: -400)))
+            XCTAssertEqual(window.frame.width, 760, accuracy: 4)
+            XCTAssertGreaterThanOrEqual(window.frame.height, 480)
+            XCTAssertLessThan(window.frame.height, 545)
+
+            for title in ["Choose idle image", "Choose speaking image", "Preview talking", "Preview blink"] {
+                XCTAssertTrue(window.buttons[title].isHittable, "\(title) at minimum size in \(appearance) appearance")
+            }
+            app.typeKey("i", modifierFlags: [.command, .control])
+            XCTAssertTrue(idlePicker.waitForNonExistence(timeout: 5))
+            app.typeKey("i", modifierFlags: [.command, .control])
+            XCTAssertTrue(idlePicker.waitForExistence(timeout: 5))
+
+            idlePicker.click()
+            let open = app.sheets.buttons["Open"]
+            XCTAssertTrue(open.waitForExistence(timeout: 5))
+            app.typeKey("g", modifierFlags: [.command, .shift])
+            app.typeText(fixture.path)
+            app.typeKey(.return, modifierFlags: [])
+            open.click()
+            XCTAssertTrue(open.waitForNonExistence(timeout: 5))
+            XCTAssertEqual(idlePicker.value as? String, filename)
+            XCTAssertTrue(window.buttons["Choose speaking image"].isHittable)
+            XCTAssertFalse(window.buttons["Use these images"].isEnabled)
+        }
     }
 
     private func openSettings(_ title: String, in app: XCUIApplication) {

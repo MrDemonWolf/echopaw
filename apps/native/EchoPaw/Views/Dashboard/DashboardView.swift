@@ -75,36 +75,47 @@ private struct SessionDashboard: View {
     let session: PreviewSession
 
     var body: some View {
-        GeometryReader { geometry in
-            ScrollView {
-                VStack(alignment: .leading, spacing: EP.space4) {
-                    HStack(alignment: .firstTextBaseline) {
-                        Text(session.character?.name ?? "Mascot preview")
-                            .font(BrandType.heading)
-                            .accessibilityAddTraits(.isHeader)
-                        Spacer()
-                        Label("Offline preview", systemImage: "circle.dotted")
-                            .font(.callout).foregroundStyle(.secondary)
-                    }
-                    PreviewSurface(session: session)
-                        .frame(height: max(EP.stageMinHeight, min(geometry.size.height * 0.46, 470)))
-                    SessionControls(session: session)
+        VStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: EP.space1) {
+                Text(session.character?.name ?? "Mascot preview")
+                    .font(BrandType.heading)
+                    .accessibilityAddTraits(.isHeader)
+                Label(session.isStopped ? "Rehearsal stopped" : "Offline rehearsal",
+                      systemImage: session.isStopped ? "stop.circle" : "headphones")
+                    .font(.callout).foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, EP.space4)
+            .padding(.vertical, EP.space2)
+
+            PreviewSurface(session: session)
+
+            Divider()
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: EP.space4) {
+                    SessionControls(session: session).fixedSize()
                     Divider()
                     AudioDestination(session: session)
-                    if !session.recentActivity.isEmpty {
-                        Divider()
-                        activity
-                    }
                 }
-                .padding(EP.space6)
-                .frame(maxWidth: 1040)
-                .frame(maxWidth: .infinity)
+                VStack(spacing: EP.space2) {
+                    SessionControls(session: session)
+                    AudioDestination(session: session)
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(EP.space3)
+            if !session.recentActivity.isEmpty {
+                DisclosureGroup("Recent activity") {
+                    activity
+                }
+                .padding(.horizontal, EP.space4)
+                .padding(.bottom, EP.space2)
             }
         }
     }
+
     private var activity: some View {
         VStack(alignment: .leading, spacing: EP.space2) {
-            Text("Recent activity").font(.headline).accessibilityAddTraits(.isHeader)
             ForEach(Array(session.recentActivity.prefix(3).enumerated()), id: \.offset) { _, event in
                 Label(event, systemImage: "clock").font(.callout).foregroundStyle(.secondary)
             }
@@ -118,17 +129,13 @@ struct SessionControls: View {
     let session: PreviewSession
 
     var body: some View {
-        ViewThatFits(in: .horizontal) {
-            HStack(spacing: EP.space3) {
-                playback
-                Spacer()
-                state
-            }
-            VStack(alignment: .leading, spacing: EP.space2) {
-                playback
-                state
-            }
+        VStack(spacing: EP.space2) {
+            playback
+                .controlSize(.large)
+            state
+                .foregroundStyle(.secondary)
         }
+        .frame(maxWidth: .infinity)
     }
 
     private var playback: some View {

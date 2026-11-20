@@ -58,29 +58,31 @@ struct EchoPawApp: App {
         }
         .windowResizability(.contentMinSize)
         .defaultSize(width: 940, height: 710)
+        .defaultLaunchBehavior(.presented)
         .commands {
-            InspectorCommands()
             CommandGroup(after: .help) {
                 OpenSetupGuideButton()
             }
-            #if DEBUG
             CommandGroup(after: .windowList) {
+                Button(session.captureActionTitle, action: session.toggleCapture)
+                    .keyboardShortcut("o", modifiers: [.command, .shift])
+                    .disabled(session.character == nil || session.isStopped)
+                #if DEBUG
                 OpenGalleryButton()
+                #endif
             }
-            #endif
-            CommandMenu("Preview") {
+            CommandMenu("Character") {
                 Button(session.testOutputActionTitle, action: session.toggleTestOutput)
                     .keyboardShortcut("t", modifiers: [.command, .shift])
                     .disabled(!session.canControlTestOutput)
                 Button("Preview blink", action: session.previewBlink)
                     .keyboardShortcut("b", modifiers: [.command, .shift])
                     .disabled(!session.canPreviewBlink)
+            }
+            CommandMenu("Session") {
                 Button(session.isMuted ? "Unmute speech" : "Mute speech", action: session.toggleMute)
                     .keyboardShortcut("m", modifiers: [.command, .shift])
                     .disabled(session.isStopped)
-                Button(session.captureActionTitle, action: session.toggleCapture)
-                    .keyboardShortcut("o", modifiers: [.command, .shift])
-                    .disabled(session.character == nil || session.isStopped)
                 Divider()
                 Button("Emergency stop", action: session.emergencyStop)
                     .keyboardShortcut("k", modifiers: [.command, .shift])

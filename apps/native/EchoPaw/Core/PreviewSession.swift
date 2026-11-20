@@ -161,8 +161,16 @@ final class PreviewSession {
     }
 
     func importCharacter(_ result: Result<URL, Error>) {
+        importCharacter { try CharacterPack.importFolder(result.get()) }
+    }
+
+    func importCharacterImages(idle: URL, speaking: URL) {
+        importCharacter { try CharacterPack.importImages(idle: idle, speaking: speaking) }
+    }
+
+    private func importCharacter(_ load: () throws -> CharacterPack) {
         do {
-            character = try CharacterPack.importFolder(result.get())
+            character = try load()
             preferences.set(false, forKey: "useSampleCharacter")
             characterError = nil
             scheduleBlinking()
