@@ -2,6 +2,8 @@
 
 Reviewed November 18, 2026. Sources include first-party guides, demos, storefronts, repositories and a small sample of public support reports. This was a desk review. Resource requirements and file sizes are vendor figures and cannot be compared with runtime footprint.
 
+The [November 20 workflow review](competitive-workflows.md) compares two shipping Mac co-hosts with the current EchoPaw checkout and recommends a first rehearsal flow.
+
 ## Avatar tools
 
 | Product | Install, setup and price | Character and speaking | OBS, audio and gaps |
