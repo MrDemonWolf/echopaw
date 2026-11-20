@@ -5,6 +5,11 @@
   --ep-blue-600: #1178b8;
   --ep-blue-500: #1795d2;
   --ep-blue-400: #3aaee3;
+  --ep-success: #2fab66;
+  --ep-warning: #e3a008;
+  --ep-danger: #d33a3a;
+  --ep-info: var(--ep-blue-500);
+  --ep-stage-light: #d6eaf6;
   --ep-paper: #edf4fb;
   --ep-ink: #dce9f7;
   --ep-font-body: "Roboto Variable", sans-serif;
@@ -14,6 +19,9 @@
   --ep-space-3: 0.75rem;
   --ep-space-4: 1rem;
   --ep-space-6: 1.5rem;
+  --ep-stage-min-height: 13.5rem;
+  --ep-sidebar-width: 11rem;
+  --ep-inspector-width: 17rem;
   --ep-radius-control: 0.5rem;
   --ep-radius-panel: 1rem;
   --ep-radius-feature: 1.5rem;

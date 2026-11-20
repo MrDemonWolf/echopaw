@@ -5,11 +5,13 @@ import SwiftUI
 struct EchoPawApp: App {
     @State private var session = PreviewSession()
 
+    init() { BrandType.registerFonts() }
+
     var body: some Scene {
         Window("EchoPaw", id: "dashboard") {
             DashboardView(session: session)
         }
-        .defaultSize(width: 950, height: 600)
+        .defaultSize(width: 940, height: 710)
         .commands {
             InspectorCommands()
             CommandMenu("Preview") {
@@ -30,6 +32,17 @@ struct EchoPawApp: App {
                     .disabled(!session.isStopped)
             }
         }
+
+        Settings {
+            PreferencesView(session: session)
+        }
+
+        #if DEBUG
+        Window("Component Gallery", id: "component-gallery") {
+            ComponentGallery(session: session)
+        }
+        .defaultLaunchBehavior(.suppressed)
+        #endif
 
         MenuBarExtra("EchoPaw", systemImage: session.isStopped ? "stop.circle" : "waveform") {
             PreviewMenu(session: session)
