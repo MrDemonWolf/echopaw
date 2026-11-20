@@ -1,17 +1,19 @@
 # EchoPaw - A Streaming Mascot for Mac
 
-EchoPaw is an open-source macOS utility for streamers who want a PNG mascot
-that can speak and react to Twitch events. The first native build is an
-offline preview with two PNG poses, local test audio, and a dedicated mascot
-window for OBS testing.
+EchoPaw is an open-source macOS utility for streamers building a speaking
+PNG mascot. The current build lets you rehearse offline, try your character
+art and check the dedicated mascot window in OBS.
 
-## Planned features
+## Features
 
-- **Two-image mascot** with an offline preview and optional expressions.
-- **OBS routing** with System Default output and optional device selection.
-- **Balanced reactions** with separately connected Twitch identities.
-- **OpenAI and ElevenLabs** using user-owned keys, with PackGuard and budgets.
-- **Streamer controls** for mute, pause and emergency stop.
+- **Character preview** with a blinking starter wolf and two-PNG import.
+- **Audio rehearsal** with a bundled spoken line and output device selection.
+- **Mascot window** for OBS with speech mute and emergency stop in EchoPaw.
+- **Connection settings** for checking provider keys and authorizing separate
+  Twitch broadcaster and bot accounts.
+
+Live conversation, viewer reactions and Stream Deck controls are on the
+[pilot checklist](docs/product/next-steps.md).
 
 ## Getting started
 
@@ -25,7 +27,6 @@ window for OBS testing.
 | --- | --- |
 | Desktop app | Swift 6, SwiftUI, AppKit for the capture window, Apple Silicon macOS 15+ |
 | Docs and prototype | Astro, Starlight, TypeScript and Bun |
-| Planned integrations | Twitch, OBS, OpenAI, ElevenLabs, Sparkle and optional Stream Deck |
 
 ## Development
 

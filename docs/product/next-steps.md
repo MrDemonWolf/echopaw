@@ -4,21 +4,26 @@ See the [live co-host plan](live-cohost-plan.md) for decisions from the product 
 
 Reviewed November 20, 2026. The first onboarding win is to hear the wolf and check it in OBS. Credentials and live reactions follow from that working path. The estimates below are test targets. [Competitive workflow research](../research/competitive-workflows.md)
 
+## Pilot checklist
+
+- [x] Rehearse offline with the starter wolf, sample speech and separate mascot window.
+- [x] Validate a real OpenAI key with the read-only model list endpoint. Model-specific generation remains a separate check.
+- [x] Check Character at its minimum window size in light and dark appearance. On macOS 27.0.1, the UI test kept the preview buttons and image pickers reachable, selected a long filename, and toggled the inspector using Control-Command-I.
+- [ ] Check full keyboard traversal, VoiceOver and the macOS 15 runtime.
+- [ ] Record on the Mac mini. Confirm one copy of mascot speech, a separate game audio track and capture recovery after emergency stop.
+- [ ] Deliver one host conversation with the dedicated mic, short replies, PackGuard and immediate cancellation.
+- [ ] Save named outfits and switch them on the same OBS source. Test listening, stop and outfit selection on the physical Stream Deck.
+- [ ] Add opt-in viewer interactions once the host pilot passes.
+
 ## What to borrow from WolfWave
 
 I reviewed WolfWave at commit `2a9629d4`. The wizard keeps the progress header and footer in place, scrolls the step content, and gives each step one brief purpose. Explicit **Skip setup** leads to a shorter completion screen. A shared Twitch editor keeps the account state consistent between Settings and onboarding. When the code is visible, the user sees the sign-in task and its recovery actions. Leaving a presentation cancels that presentation’s sign-in. [Wizard source](https://github.com/MrDemonWolf/wolfwave/blob/2a9629d497b12b14ee4a357b6b4519749f95143d/apps/native/WolfWave/Views/Onboarding/OnboardingView.swift) · [Step scaffold](https://github.com/MrDemonWolf/wolfwave/blob/2a9629d497b12b14ee4a357b6b4519749f95143d/design-system/components/onboarding-step-scaffold.md) · [Device code view](https://github.com/MrDemonWolf/wolfwave/blob/2a9629d497b12b14ee4a357b6b4519749f95143d/apps/native/WolfWave/Views/Twitch/DeviceCodeView.swift)
 
-EchoPaw has a starter wolf, two-PNG import, a local audio test, a dedicated OBS capture window and separate account screens. The first Setup Guide uses the current audio test. A spoken local clip will make the first step demonstrate the character’s voice as well as its mouth movement. [Native app](../../apps/native/README.md) · [Onboarding spec](../onboarding/setup.md)
+EchoPaw has a starter wolf, two-PNG import, a local audio test, a dedicated OBS capture window and separate account screens. The first Setup Guide plays a bundled spoken line so the streamer can hear the wolf and see its mouth move. [Native app](../../apps/native/README.md) · [Onboarding spec](../onboarding/setup.md)
 
 ## First-run flow
 
-| Screen | What the user does | Recovery or exit |
-| --- | --- | --- |
-| **Try your mascot** | See the wolf, choose an output and play the bundled sample line. | Change the output and retry in place. Use the starter wolf if a custom import failed. Custom packs belong in Character when the user wants them. |
-| **Check your OBS output** | **Show mascot window** names the exact OBS source to select. Play one clip in an OBS test scene and confirm that you can see and hear it. | Skip OBS to finish quickly or use **Set up later** to resume this step. Add more targeted recovery for missing or doubled audio after recording the behavior. |
-| **Connect accounts when ready** | Open the shared API Keys or Twitch settings, or choose **Done** to go back to rehearsing. | Retain normal settings and keep live output disarmed. Show the output destination and emergency stop shortcut on the Dashboard. |
-
-Keep **Back** and **Set up later** in a stable footer, show compact step progress, and announce the step heading. Offer the guide once on first launch and let **Help > Setup Guide** resume an unfinished walkthrough. Preserve preferences. On close or quit, clear draft secrets and cancel the attempt owned by that presentation. Set a minimum usable window size, leave fullscreen disabled, and keep the preview background-free. [Apple onboarding guidance](https://developer.apple.com/design/human-interface-guidelines/onboarding) · [EchoPaw design system](design-system.md)
+Use the [five-minute setup](../../apps/docs/src/content/docs/start/five-minute-setup.mdx) for the current steps and the [onboarding specification](../onboarding/setup.md) for future recovery and accessibility requirements. Keep the progress and footer stable, let **Help > Setup Guide** resume an unfinished guide, and scope cancellation to the presentation that started the work.
 
 ## Optional setup checklist
 
@@ -80,4 +85,4 @@ The chosen direction is **wolf ears in a speech bubble**. Use two broad ear shap
 - [ ] Walk through one signed beta from clean installation and OBS rehearsal to deliberate stop. Validate macOS audio device loss, recoverable configuration, notarization, and a genuine Sparkle update across signed builds. Publish setup, replacement, disconnect, privacy and troubleshooting guidance with synthetic screenshots. [Distribution](../architecture/distribution.md)
 - [ ] Opt in independently to microphone reactions, optional Stream Deck control, richer character states and later viewer memory. Validate their permissions, accessibility, stop behavior and removal before treating them as supported. [Product roadmap](roadmap.md)
 
-The next useful checkpoint is a clean install that reaches the spoken sample without a provider sign-in. Live OAuth approval, OBS audio isolation and signed-release behavior require their own evidence.
+Use the pilot checklist above for build order. Use the roadmap for scope beyond the pilot.
