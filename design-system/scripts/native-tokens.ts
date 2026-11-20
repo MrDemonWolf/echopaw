@@ -20,6 +20,11 @@ for (const key of ["navy-900", "navy-800", "navy-700", "blue-600", "blue-500", "
   const name = key.replace(/-(\w)/g, (_, c: string) => c.toUpperCase());
   lines.push(`    static let ${name} = Color(red: ${red}/255.0, green: ${green}/255.0, blue: ${blue}/255.0)`);
 }
+for (const [key, name] of [["body-family", "bodyFamily"], ["heading-family", "headingFamily"]]) {
+  const family = JSON.parse(token(key));
+  if (typeof family !== "string" || !/^[A-Za-z ]+$/.test(family)) throw new Error("Invalid font family " + key);
+  lines.push(`    static let ${name} = ${JSON.stringify(family)}`);
+}
 for (const [key, value] of values) {
   if (!value.endsWith("rem")) continue;
   const name = key.replace(/-(\w)/g, (_, c: string) => c.toUpperCase());

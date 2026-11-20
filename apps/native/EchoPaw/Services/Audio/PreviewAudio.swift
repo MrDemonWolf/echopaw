@@ -13,6 +13,7 @@ final class PreviewAudio {
 
     private(set) var devices: [OutputDevice] = []
     private(set) var selectedDeviceUID: String?
+    private(set) var isSpeaking = false
     private(set) var isPlaying = false
     private(set) var lastError: String?
     var isSelectedOutputAvailable: Bool {
@@ -20,16 +21,27 @@ final class PreviewAudio {
         return observer != nil && devices.contains { $0.uid == selectedDeviceUID }
     }
 
+    private let preferences: UserDefaults
+    var onSpeakingChange: (() -> Void)?
     var onPlaybackChange: ((Bool) -> Void)?
     var volume: Float = 0.35 {
-        didSet { player?.volume = volume }
+        didSet {
+            player?.volume = volume
+            preferences.set(volume, forKey: "outputVolume")
+        }
     }
 
     @ObservationIgnored private var observer: DeviceObserver?
     @ObservationIgnored private var player: AVAudioPlayer?
+    @ObservationIgnored private var meterTask: Task<Void, Never>?
     @ObservationIgnored private var completion: PlaybackCompletion?
 
-    init() {
+    init(preferences: UserDefaults = .standard) {
+        self.preferences = preferences
+        selectedDeviceUID = preferences.string(forKey: "outputDeviceUID")
+        if let stored = preferences.object(forKey: "outputVolume") as? NSNumber, stored.floatValue.isFinite {
+            volume = min(1, max(0, stored.floatValue))
+        }
         observer = DeviceObserver { [weak self] in
             Task { @MainActor [weak self] in self?.refreshDevices() }
         }
@@ -40,6 +52,7 @@ final class PreviewAudio {
         guard uid != selectedDeviceUID else { return }
         stop()
         selectedDeviceUID = uid
+        preferences.set(uid, forKey: "outputDeviceUID")
         lastError = nil
         refreshDevices()
     }
@@ -71,6 +84,7 @@ final class PreviewAudio {
                     if !succeeded { self.lastError = "Playback was interrupted. Check your audio output." }
                 }
             }
+            player.isMeteringEnabled = true
             player.delegate = completion
             player.volume = volume
             guard player.play() else {
@@ -80,17 +94,41 @@ final class PreviewAudio {
             self.completion = completion
             self.player = player
             setPlaying(true)
+            meterTask = Task { [weak self] in
+                while !Task.isCancelled, self?.isPlaying == true {
+                    self?.updateSpeechLevel()
+                    do { try await Task.sleep(for: .milliseconds(32)) } catch { return }
+                }
+            }
         } catch {
             lastError = "The test sound could not be opened."
         }
     }
 
+    deinit { meterTask?.cancel() }
+
     func stop() {
+        meterTask?.cancel()
+        meterTask = nil
         player?.delegate = nil
         player?.stop()
         player = nil
         completion = nil
+        setSpeaking(false)
         setPlaying(false)
+    }
+
+    private func updateSpeechLevel() {
+        guard let player else { return }
+        player.updateMeters()
+        // The bundled notes measure about -14 dBFS, with rests below -16 dBFS.
+        setSpeaking(player.isPlaying && player.averagePower(forChannel: 0) > -16)
+    }
+
+    private func setSpeaking(_ speaking: Bool) {
+        guard isSpeaking != speaking else { return }
+        isSpeaking = speaking
+        onSpeakingChange?()
     }
 
     private func refreshDevices() {

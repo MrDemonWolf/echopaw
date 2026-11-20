@@ -11,8 +11,16 @@ struct CharacterView: View {
             Text(session.character?.name ?? "Choose a character")
                 .font(BrandType.heading).accessibilityAddTraits(.isHeader)
             PreviewSurface(session: session).frame(maxHeight: .infinity)
+            if session.isMuted || !session.audio.isSelectedOutputAvailable {
+                Label(session.playbackLabel, systemImage: session.isStopped ? "stop.circle" : "speaker.slash")
+                    .font(.callout)
+            }
             HStack {
                 TalkingButton(session: session)
+                if session.hasBlinkFrames {
+                    Button("Preview blink", systemImage: "eye", action: session.previewBlink)
+                        .disabled(!session.canPreviewBlink)
+                }
             }
         }
         .padding(EP.space4)

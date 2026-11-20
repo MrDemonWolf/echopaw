@@ -15,6 +15,11 @@ enum EP {
     static let stageLight = Color(red: 214/255.0, green: 234/255.0, blue: 246/255.0)
     static let paper = Color(red: 237/255.0, green: 244/255.0, blue: 251/255.0)
     static let ink = Color(red: 220/255.0, green: 233/255.0, blue: 247/255.0)
+    static let bodyFamily = "Roboto"
+    static let headingFamily = "Montserrat"
+    static let bodySize: CGFloat = 14
+    static let headingSize: CGFloat = 23
+    static let brandSize: CGFloat = 17
     static let space1: CGFloat = 4
     static let space2: CGFloat = 8
     static let space3: CGFloat = 12

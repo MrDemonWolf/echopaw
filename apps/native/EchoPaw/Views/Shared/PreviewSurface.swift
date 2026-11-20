@@ -10,8 +10,8 @@ enum BrandType {
         }
     }
 
-    static let heading = Font.custom("Montserrat", size: 23, relativeTo: .title2).weight(.semibold)
-    static let body = Font.custom("Roboto", size: 14, relativeTo: .body)
+    static let heading = Font.custom(EP.headingFamily, size: EP.headingSize, relativeTo: .title2).weight(.semibold)
+    static let body = Font.custom(EP.bodyFamily, size: EP.bodySize, relativeTo: .body)
 }
 
 struct PreviewSurface: View {
@@ -27,7 +27,7 @@ struct PreviewSurface: View {
                 Image(nsImage: image)
                     .resizable().scaledToFit()
                     .padding(.vertical, EP.space3)
-                    .accessibilityLabel(session.audio.isPlaying ? "Talking mascot" : "Idle mascot")
+                    .accessibilityLabel(session.isTalking ? "Talking mascot" : "Idle mascot")
             } else {
                 ContentUnavailableView("Choose a character", systemImage: "pawprint")
             }
@@ -75,10 +75,12 @@ struct StatusRow: View {
     let value: String
 
     var body: some View {
-        LabeledContent {
-            Text(value).foregroundStyle(.secondary).multilineTextAlignment(.trailing)
-        } label: {
-            Label(title, systemImage: symbol)
+        HStack(alignment: .firstTextBaseline, spacing: EP.space2) {
+            Image(systemName: symbol)
+                .frame(width: 18).foregroundStyle(.secondary).accessibilityHidden(true)
+            Text(title)
+            Spacer(minLength: EP.space2)
+            Text(value).font(.callout).foregroundStyle(.secondary).multilineTextAlignment(.trailing)
         }
         .accessibilityElement(children: .combine)
     }

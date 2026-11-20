@@ -8,6 +8,7 @@ private enum Destination: String, CaseIterable {
 
 struct DashboardView: View {
     let session: PreviewSession
+    let mic: LocalMicrophone
     @SceneStorage("workspaceDestination") private var destination = Destination.dashboard
     @SceneStorage("characterInspector") private var inspector = true
 
@@ -15,7 +16,7 @@ struct DashboardView: View {
         NavigationSplitView {
             VStack(alignment: .leading, spacing: 0) {
                 Label {
-                    Text("EchoPaw").font(.custom("Montserrat", size: 17, relativeTo: .headline).weight(.semibold)).lineLimit(1)
+                    Text("EchoPaw").font(.custom(EP.headingFamily, size: EP.brandSize, relativeTo: .headline).weight(.semibold)).lineLimit(1)
                 } icon: {
                     Image(nsImage: NSApplication.shared.applicationIconImage)
                         .resizable().frame(width: 26, height: 26).accessibilityHidden(true)
@@ -33,16 +34,21 @@ struct DashboardView: View {
         } detail: {
             Group {
                 switch destination {
-                case .dashboard: SessionDashboard(session: session)
+                case .dashboard: SessionDashboard(session: session, mic: mic)
                 case .character: CharacterView(session: session, inspector: $inspector)
                 }
             }
             .navigationTitle(destination.rawValue)
             .toolbar {
                 ToolbarItemGroup(placement: .primaryAction) {
+                    if mic.state != .off {
+                        Button(mic.state == .starting ? "Cancel listening" : "Stop listening",
+                               systemImage: "mic.fill", action: mic.stop)
+                            .labelStyle(.titleAndIcon)
+                    }
                     Button(session.captureActionTitle, systemImage: "macwindow.on.rectangle", action: session.toggleCapture)
                         .help(session.captureActionTitle + " (⇧⌘O)")
-                        .disabled(session.character == nil)
+                        .disabled(session.character == nil || session.isStopped)
                     Button(session.isStopped ? "Resume preview" : "Emergency stop",
                            systemImage: session.isStopped ? "play.circle" : "stop.circle") {
                         if session.isStopped { session.resume() } else { session.emergencyStop() }
@@ -53,6 +59,8 @@ struct DashboardView: View {
             }
         }
         .frame(minWidth: 570, minHeight: 440)
+        .onAppear { session.setPreviewVisible(true) }
+        .onDisappear { session.setPreviewVisible(false) }
         .onChange(of: session.isStopped) { _, stopped in
             if stopped { AccessibilityNotification.Announcement("Stopped. Resume preview when ready.").post() }
         }
@@ -61,6 +69,7 @@ struct DashboardView: View {
 
 private struct SessionDashboard: View {
     let session: PreviewSession
+    let mic: LocalMicrophone
 
     var body: some View {
         GeometryReader { geometry in
@@ -80,7 +89,16 @@ private struct SessionDashboard: View {
                     Divider()
                     AudioDestination(session: session)
                     Divider()
-                    ConnectionsView()
+                    if !session.recentActivity.isEmpty && geometry.size.width > 590 {
+                        HStack(alignment: .top, spacing: EP.space6) {
+                            ConnectionsView()
+                            Divider()
+                            activity
+                        }
+                    } else {
+                        ConnectionsView()
+                        if !session.recentActivity.isEmpty { Divider(); activity }
+                    }
                 }
                 .padding(EP.space6)
                 .frame(maxWidth: 1040)
@@ -88,6 +106,16 @@ private struct SessionDashboard: View {
             }
         }
     }
+    private var activity: some View {
+        VStack(alignment: .leading, spacing: EP.space2) {
+            Text("Recent activity").font(.headline).accessibilityAddTraits(.isHeader)
+            ForEach(Array(session.recentActivity.prefix(3).enumerated()), id: \.offset) { _, event in
+                Label(event, systemImage: "clock").font(.callout).foregroundStyle(.secondary)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .topLeading)
+    }
+
 }
 
 struct SessionControls: View {
@@ -108,6 +136,20 @@ struct SessionControls: View {
     }
 
     private var actions: some View {
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: EP.space2) {
+                playback
+                ai
+            }
+            .fixedSize(horizontal: true, vertical: false)
+            VStack(alignment: .leading, spacing: EP.space2) {
+                playback
+                ai
+            }
+        }
+    }
+
+    private var playback: some View {
         HStack(spacing: EP.space2) {
             TalkingButton(session: session)
             Button(session.isMuted ? "Unmute speech" : "Mute speech",
@@ -117,6 +159,13 @@ struct SessionControls: View {
         }
     }
 
+    private var ai: some View {
+        Button(session.isAIPaused ? "Resume AI" : "Pause AI",
+               systemImage: session.isAIPaused ? "sparkles" : "pause.circle", action: session.toggleAIPause)
+            .disabled(session.isStopped)
+            .help("Allow or pause automatic responses. Providers are disconnected.")
+    }
+
     private var state: some View {
         Label(session.playbackLabel, systemImage: session.isStopped ? "stop.circle" : "waveform")
             .font(.callout).fixedSize(horizontal: true, vertical: false)
@@ -124,22 +173,24 @@ struct SessionControls: View {
 }
 
 private struct AudioDestination: View {
+    @Environment(\.openSettings) private var openSettings
+    @AppStorage("preferencesTab") private var preferencesTab = "audio"
     let session: PreviewSession
 
     var body: some View {
         HStack(spacing: EP.space3) {
-            Image(systemName: "hifispeaker").font(.title2).foregroundStyle(.secondary)
+            Image(systemName: "hifispeaker").font(.title2).foregroundStyle(.secondary).accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 2) {
                 Text("Audio output").font(.headline)
                 Text(session.audio.devices.first { $0.uid == session.audio.selectedDeviceUID }?.name
                      ?? (session.audio.selectedDeviceUID == nil ? "System Default" : "Device unavailable"))
-                    .font(BrandType.body).foregroundStyle(.secondary).textSelection(.enabled)
+                    .font(BrandType.body).foregroundStyle(.secondary)
                 if let error = session.audio.lastError {
                     Label(error, systemImage: "exclamationmark.triangle").font(.callout)
                 }
             }
             Spacer()
-            SettingsLink { Text("Settings…") }
+            Button("Choose output…") { preferencesTab = "audio"; openSettings() }
                 .accessibilityLabel("Open audio settings")
         }
     }

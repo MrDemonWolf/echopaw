@@ -12,8 +12,13 @@
   --ep-stage-light: #d6eaf6;
   --ep-paper: #edf4fb;
   --ep-ink: #dce9f7;
-  --ep-font-body: "Roboto Variable", sans-serif;
-  --ep-font-heading: "Montserrat Variable", sans-serif;
+  --ep-body-family: "Roboto";
+  --ep-heading-family: "Montserrat";
+  --ep-font-body: "Roboto Variable", var(--ep-body-family), sans-serif;
+  --ep-font-heading: "Montserrat Variable", var(--ep-heading-family), sans-serif;
+  --ep-body-size: 0.875rem;
+  --ep-heading-size: 1.4375rem;
+  --ep-brand-size: 1.0625rem;
   --ep-space-1: 0.25rem;
   --ep-space-2: 0.5rem;
   --ep-space-3: 0.75rem;

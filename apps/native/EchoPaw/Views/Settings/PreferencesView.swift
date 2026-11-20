@@ -2,9 +2,12 @@ import SwiftUI
 
 struct PreferencesView: View {
     @Bindable var session: PreviewSession
+    let mic: LocalMicrophone
+    @AppStorage("preferencesTab") private var tab = "audio"
+    @AppStorage("windowAppearance") private var appearance = "system"
 
     var body: some View {
-        TabView {
+        TabView(selection: $tab) {
             Form {
                 Section("Playback") {
                     DevicePicker(audio: session.audio)
@@ -21,18 +24,28 @@ struct PreferencesView: View {
                         .font(.callout).foregroundStyle(.secondary)
                 }
             }
-            .tabItem { Label("Audio & capture", systemImage: "speaker.wave.2") }
+            .tabItem { Label("Audio & capture", systemImage: "speaker.wave.2") }.tag("audio")
 
+            Form { MicrophonePreferences(mic: mic, stopped: session.isStopped) }
+                .tabItem { Label("Microphone", systemImage: "mic") }.tag("mic")
             Form {
                 Section("Accounts") { ConnectionsView() }
                 Section("Privacy") {
                     Text("Preview audio and character images stay on this Mac. No account is needed.")
                 }
             }
-            .tabItem { Label("Privacy & accounts", systemImage: "hand.raised") }
+            .tabItem { Label("Privacy & accounts", systemImage: "hand.raised") }.tag("privacy")
+            Form {
+                Picker("Appearance", selection: $appearance) {
+                    Text("System").tag("system")
+                    Text("Light").tag("light")
+                    Text("Dark").tag("dark")
+                }
+            }
+            .tabItem { Label("General", systemImage: "gearshape") }.tag("general")
         }
         .formStyle(.grouped)
-        .frame(width: 490, height: 360)
+        .frame(width: 510, height: 430)
     }
 }
 
@@ -51,6 +64,8 @@ struct DevicePicker: View {
                 Text("Unavailable device").tag(Optional(selected))
             }
         }
+        .help(audio.devices.first { $0.uid == audio.selectedDeviceUID }?.name
+              ?? (audio.selectedDeviceUID == nil ? "System Default" : "Selected output is unavailable"))
     }
 }
 
