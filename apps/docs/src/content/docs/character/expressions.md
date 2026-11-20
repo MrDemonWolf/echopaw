@@ -4,6 +4,8 @@ title: Expressions and blinking
 
 The two base images are enough for speaking. Supply separate closed-eye art if you want an eye blink. EchoPaw cannot infer meaningful eye movement reliably from arbitrary PNGs.
 
+The native preview supports `blinking.png` for closed eyes while idle and `talking-blinking.png` for closed eyes while talking. Match the base canvas size and placement. If a closed-eye pose is missing, EchoPaw keeps the normal pose for that state. Use **Auto-blink** to pause blinking. macOS Reduce Motion also pauses it.
+
 When the optional editor is available:
 
 1. Add closed-eye or expression art on the same canvas as the base pose.

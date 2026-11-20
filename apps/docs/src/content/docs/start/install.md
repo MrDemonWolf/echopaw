@@ -3,7 +3,7 @@ title: Install on macOS
 description: Check compatibility and install the signed DMG when available.
 ---
 
-EchoPaw targets Apple Silicon and macOS 15 or later. No public native installer is available during planning.
+EchoPaw targets Apple Silicon and macOS 15 or later. The offline preview is available to build from source. A public native installer is pending.
 
 When a release is available:
 

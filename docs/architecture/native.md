@@ -83,4 +83,4 @@ Measure a signed release build on a base Apple Silicon Mac with macOS 15 and on 
 | Emergency stop command to silence on wired output, 30 trials | p95 ≤ 150 ms |
 | 60 min recording with 100 fixture utterances and reconnects | Zero overlapping clips, zero stale output after stop, no sustained memory growth > 20 MB from steady state |
 
-No native code or benchmarks exist in this planning slice. Run the render-only capture spike, audio routing spike, signed release smoke test and accessible setup checks before claiming support.
+The native preview now implements the render and audio spike. See the [native README](../../apps/native/README.md) for local build steps and the remaining capture, hardware and release checks.

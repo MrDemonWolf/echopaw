@@ -2,6 +2,8 @@
 
 See the [browser dashboard screenshot](screenshots/dashboard-dark.png) for the prototype's desktop layout.
 
+The native offline preview uses a larger mascot stage with playback controls directly beneath it. A single inspector groups character import, audio output and capture controls. It stacks below the stage in a narrow window. Emergency stop stays in the toolbar and Preview menu. These choices draw on [Apple's toolbar guidance](https://developer.apple.com/design/human-interface-guidelines/toolbars), [QuickTime playback controls](https://support.apple.com/guide/quicktime-player/open-and-play-a-file-qtp6cee0761b/mac), and [WolfWave's integration dashboard](https://github.com/MrDemonWolf/wolfwave/blob/2a9629d4/apps/native/WolfWave/Views/Shared/IntegrationDashboardView.swift).
+
 Proposed SwiftUI layout reviewed against Apple’s guidance on 2026-11-18. Use one main `NavigationSplitView`, familiar toolbar commands and a normal Mac window. Group the sidebar by task. Put appearance, shortcuts and updates in the standard Settings window, reachable through **EchoPaw > Settings**. An optional menu bar item mirrors important actions and opens Dashboard. The separate OBS output window shows the character content only. [Interactive Dashboard prototype](../../apps/docs/src/content/docs/start/interface-preview.mdx)
 
 ```text

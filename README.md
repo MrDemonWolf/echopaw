@@ -1,9 +1,9 @@
 # EchoPaw - A Streaming Mascot for Mac
 
-EchoPaw is a planned open-source macOS utility for streamers who want a PNG
-mascot that can speak and react to Twitch events. The project is in research
-and planning. The documentation and browser prototype are available in this
-checkout.
+EchoPaw is an open-source macOS utility for streamers who want a PNG mascot
+that can speak and react to Twitch events. The first native build is an
+offline preview with two PNG poses, local test audio, and a dedicated mascot
+window for OBS testing.
 
 ## Planned features
 
@@ -15,15 +15,15 @@ checkout.
 
 ## Getting started
 
-1. Read the [planning index](docs/README.md) for architecture and open gates.
-2. Run the docs site to try the browser prototype and cost calculator.
-3. Follow the [development handoff](docs/product/handoff.md) for the first native validation slice.
+1. [Build and run the native preview](apps/native/README.md) on an Apple Silicon Mac.
+2. Read the [planning index](docs/README.md) for architecture and open gates.
+3. Run the docs site to try the browser prototype and cost calculator.
 
 ## Tech stack
 
 | Layer | Technology |
 | --- | --- |
-| Planned desktop app | Swift 6, SwiftUI, AppKit where needed, Apple Silicon macOS 15+ |
+| Desktop app | Swift 6, SwiftUI, AppKit for the capture window, Apple Silicon macOS 15+ |
 | Docs and prototype | Astro, Starlight, TypeScript and Bun |
 | Planned integrations | Twitch, OBS, OpenAI, ElevenLabs, Sparkle and optional Stream Deck |
 
@@ -45,7 +45,7 @@ calculator examples. See [contributing](CONTRIBUTING.md) for the workflow.
 ## Project structure
 
 ```text
-apps/native/      Native architecture entry point
+apps/native/      Xcode project, Swift app and tests
 apps/docs/        Static website and browser prototype
 apps/streamdeck/  Optional plugin plan
 assets/           Brand assets, icon source and previews
