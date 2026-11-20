@@ -2,11 +2,8 @@
 title: Keyword listening
 ---
 
-Keyword listening starts off. EchoPaw plans to offer local recognition when the selected locale and Mac support it. A manual keyboard action works without recognition. Push-to-talk for voice questions requires an available recognizer.
+In **Settings > Microphone**, turn on **Detect a wake phrase on this Mac** and enter your phrase. **React to my voice** independently controls mouth movement. Choose **Start listening** and allow the microphone and Speech Recognition permission prompts.
 
-1. Pick a short, distinctive phrase and select your microphone in **Microphone**.
-2. Enable **Keyword listening** separately. Allow mic and speech recognition permissions when requested. Confirm the local listening indicator.
-3. Test the keyword with your microphone, then play the same phrase through EchoPaw. Mascot speech should be gated out of the listener.
-4. Use **Stop listening** to release the microphone. In a noisy room, try push-to-talk with a supported recognizer or use the manual hotkey.
+A match shows **Wake phrase heard locally** in Settings. It cannot generate or send a response in the offline build. EchoPaw requires an available on-device recognizer for the current language. If the recognizer is unavailable, turn off phrase detection to use simple voice activity. If recognition ends, the app releases the mic and shows how to restart it.
 
-An explicitly initiated voice question may send recognized question text to OpenAI after consent and required checks. An optional cloud audio transcription path would require its own consent and budget.
+**Stop listening** and **Emergency stop** both release the microphone. The app saves the configured phrase and input preference. It keeps no microphone recordings or transcript history.

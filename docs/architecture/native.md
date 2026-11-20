@@ -29,13 +29,13 @@ apps/native/
       Capture/               AppKit mascot panel and lifecycle
     Resources/
       Assets.xcassets/
-      SampleCharacter/       Licensed two-state art for offline preview
+      SampleCharacter/       Starter wolf in four aligned poses
   EchoPawTests/
     CharacterImportTests.swift
     SessionTests.swift
 ```
 
-This is the target layout for the first native slices. Add provider-specific `Services/Twitch`, `Services/OpenAI` and `Services/ElevenLabs`, and local `Core/PackGuard` and `Core/Reactions`, as their gates are reached. Use `EchoPawTests/Fixtures` for synthetic import and event data when the first fixtures are needed. Add `EchoPawUITests` with a separate shared XCUITest scheme when the offline onboarding flow is stable. Use Swift Testing for new unit tests and XCTest for UI automation. The app target bundles its own sample art and assets. Keep icon master sources under `assets/icons`, published guidance under `apps/docs`, and engineering plans under root `docs`. [WolfWave source layout](https://github.com/MrDemonWolf/wolfwave/tree/2a9629d497b12b14ee4a357b6b4519749f95143d/apps/native/WolfWave), [Apple Xcode testing](https://developer.apple.com/documentation/xcode/testing).
+This is the target layout for the first native slices. Add provider-specific `Services/Twitch`, `Services/OpenAI` and `Services/ElevenLabs`, and local `Core/PackGuard` and `Core/Reactions`, as their gates are reached. Use `EchoPawTests/Fixtures` for synthetic import and event data when the first fixtures are needed. The shared EchoPaw scheme includes the EchoPawUITests UI test bundle. Use Swift Testing for new unit tests and XCTest for UI automation. The app target bundles its own sample art and assets. Keep icon master sources under `assets/icons`, published guidance under `apps/docs`, and engineering plans under root `docs`. [WolfWave source layout](https://github.com/MrDemonWolf/wolfwave/tree/2a9629d497b12b14ee4a357b6b4519749f95143d/apps/native/WolfWave), [Apple Xcode testing](https://developer.apple.com/documentation/xcode/testing).
 
 Follow WolfWave's separation of development and release identity before storing real data. Proposed bundle IDs are `com.mrdemonwolf.echopaw.dev` for Debug and `com.mrdemonwolf.echopaw` for Release, pending owner reservation. Give Debug distinct display name, Keychain service accounts and Application Support paths. Give unit tests test-only storage and fixture networking. Keep credentials in Keychain, release secrets in CI, and any shared `.xcconfig` limited to nonsecret build settings. Keep signing, DMG, notarization and appcast steps outside the app source, modeled on WolfWave's `scripts/codesign-app.sh`, `scripts/create-dmg.sh`, `scripts/notarize-dmg.sh` and `scripts/generate-appcast.sh` when release work begins. [WolfWave scripts](https://github.com/MrDemonWolf/wolfwave/tree/2a9629d497b12b14ee4a357b6b4519749f95143d/scripts), [EchoPaw distribution plan](distribution.md).
 

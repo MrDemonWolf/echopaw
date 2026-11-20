@@ -2,7 +2,9 @@
 title: Security and privacy
 ---
 
-EchoPaw plans to keep credentials in macOS Keychain and store character assets and settings locally. EchoPaw needs no hosted user account. App logs and exports are designed to exclude secrets and raw chat or microphone content.
+The current offline app uses local character files and test audio. Optional microphone activity and supported keyword detection run on this Mac. Listening stops on emergency stop. Recent activity is limited to five action labels in memory.
+
+Future provider support plans to keep credentials in macOS Keychain and store character assets and settings locally. EchoPaw needs no hosted user account. App logs and exports are designed to exclude secrets and raw chat or microphone content.
 
 | Feature | Planned data path |
 | --- | --- |

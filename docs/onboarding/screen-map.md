@@ -1,8 +1,10 @@
 # Native interface
 
-See the [browser dashboard screenshot](screenshots/dashboard-dark.png) for the prototype's desktop layout.
+The implemented workspace has Dashboard, Character and standard Settings. Dashboard keeps playback and session controls beside the preview. Character has its own inspector. The capture window contains the sprite alone. [Native evidence](../research/native-preview-validation.md)
 
-The native offline preview uses an expanding mascot stage with playback controls beneath it. The standard macOS Setup inspector groups character import, audio output and capture controls. The toolbar and Control-Command-I toggle the inspector. Emergency stop stays in the main toolbar and Preview menu. [Apple's SwiftUI inspector guide](https://developer.apple.com/videos/play/wwdc2023/10161/) · [Apple's toolbar guidance](https://developer.apple.com/design/human-interface-guidelines/toolbars) · [QuickTime playback controls](https://support.apple.com/guide/quicktime-player/open-and-play-a-file-qtp6cee0761b/mac)
+The editing layout draws on a central canvas with playback controls and separate tool options. The reference screens were inspected directly. [Jitter on Mobbin](https://mobbin.com/screens/c1a132d2-1608-4f0e-bbe9-407971863344?utm_source=codex&utm_medium=ai-assistant&utm_source_platform=mcp) · [OpenAI Platform on Mobbin](https://mobbin.com/screens/09970017-5714-437b-8ba6-01d0ad9afdec?utm_source=codex&utm_medium=ai-assistant&utm_source_platform=mcp) · [Apple NavigationSplitView](https://developer.apple.com/documentation/swiftui/navigationsplitview)
+
+## Future destinations
 
 Proposed SwiftUI layout reviewed against Apple’s guidance on 2026-11-18. Use one main `NavigationSplitView`, familiar toolbar commands and a normal Mac window. Group the sidebar by task. Put appearance, shortcuts and updates in the standard Settings window, reachable through **EchoPaw > Settings**. An optional menu bar item mirrors important actions and opens Dashboard. The separate OBS output window shows the character content only. [Interactive Dashboard prototype](../../apps/docs/src/content/docs/start/interface-preview.mdx)
 

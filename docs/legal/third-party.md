@@ -14,3 +14,9 @@ Reviewed on 2026-11-18. List package versions and license notices from actual lo
 | [GitHub](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement), [Cloudflare](https://www.cloudflare.com/privacypolicy/) | Proposed release or docs hosts | Verify actual hosts, privacy notices, retention and DNS before publication. |
 
 Record links or license files for bundled Swift packages, build tool/runtime packages, fonts, UI icons, demo PNGs, sound samples and any plugin dependencies. Prefer original assets with documented author permission for the sample pack. The source license in this repo does not confer rights to a user’s imported art, voice, or other media. Provider APIs and their output retain their own licensing conditions.
+
+## Native preview assets
+
+The native resource bundle includes unmodified variable Montserrat and Roboto TTFs and their SIL Open Font License notices. The bundled files were fetched from the Google Fonts families on November 20, 2026. SHA-256 starts with `0f7b311b2f3279e4` for Montserrat and `d7598e12c5dbef09` for Roboto. [Font files and licenses](../../apps/native/EchoPaw/Resources/Fonts/) · [Montserrat upstream](https://github.com/google/fonts/tree/main/ofl/montserrat) · [Roboto upstream](https://github.com/google/fonts/tree/main/ofl/roboto)
+
+The local test tone is a synthesized preview fixture. The wolf art uses the project's distribution grant. [Starter wolf provenance](../research/starter-wolf-art.md)

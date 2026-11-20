@@ -2,7 +2,7 @@
 
 See the [light appearance screenshot](../onboarding/screenshots/design-system-light.png) for the palette and component examples in the docs.
 
-Planning baseline, 2026-11-18. EchoPaw uses the MrDemonWolf Brand System v6 palette and native macOS behavior. The [top-level token stylesheet](../../design-system/tokens.css) is the canonical token source. The [public examples](../../apps/docs/src/content/docs/reference/design-system.mdx) render that stylesheet's tokens. When native work starts, map these named roles to SwiftUI system styles and custom color assets where warranted. Keep asset values traceable to the token source.
+The [shared stylesheet](../../design-system/tokens.css) is the source for the docs and generated native tokens. See the [native component catalog and generation commands](../../design-system/README.md). Native menus and form controls use platform styling. The [public examples](../../apps/docs/src/content/docs/reference/design-system.mdx) use the same palette.
 
 ## Foundations
 

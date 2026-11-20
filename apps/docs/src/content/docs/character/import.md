@@ -2,14 +2,14 @@
 title: Import a character folder
 ---
 
-Start with a folder that contains two [matching PNGs](/character/images/):
+## Import two PNGs
 
-```text
-My Character/
-  idle.png
-  talking.png
-```
+1. Put **idle.png** and **talking.png** in one folder. Use static PNGs with equal canvas dimensions, up to 2048 × 2048 and 16 MiB each.
+2. Open **Character**. Show the character inspector with Control-Command-I if needed. Choose **Import folder…** and select that folder.
+3. Choose **Preview talking**. Both poses should keep the feet in place.
 
-Drop the folder in **Character** or use **Choose Folder** from the keyboard. Review the two poses before confirming. EchoPaw plans to copy the files into its local library so moving the originals does not break your stream.
+EchoPaw saves one validated import in Application Support. Moving the original files is safe. A failed replacement leaves the previous import intact. **Use starter wolf** switches back to the bundled sample.
 
-If a required image is missing, fix the file or choose the source folder again. Optional states may fall back to the base poses. Export only assets you are allowed to share. See [props and outfits](/character/props-outfits/).
+## Add blinking
+
+Place **blinking.png** (idle, eyes closed) and **talking-blinking.png** (mouth open, eyes closed) beside the two base images. Import the folder again. All frames share the same transparent canvas and pose. [Blink controls](/character/expressions/)

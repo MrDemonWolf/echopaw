@@ -4,7 +4,7 @@ title: Frequently asked questions
 
 ### Do I need subscriptions or API keys?
 
-You can use the planned offline preview without any accounts. Cloud dialogue and voices will require the relevant provider accounts and permission to use them.
+You can use the offline preview without any accounts. Cloud dialogue and voices will require the relevant provider accounts and permission to use them.
 
 ### Can I use it on Intel, Windows or Linux?
 

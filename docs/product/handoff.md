@@ -17,6 +17,10 @@ An Apple Silicon streamer can privately preview a two-PNG mascot, record it in O
 | 7 | Validate stable release and updater | Name clearance, complete docs/screenshots, clean install and signed update, notarization, failure rejection, opt-in nightly and soak evidence. |
 | 8 | Evaluate optional mic activity, keyword and deck controls | Confirm independent permissions, local activity privacy, PTT/manual alternatives, feedback and hardware stop. Split into separate issues before scheduling. |
 
+## Implemented offline workspace
+
+The working checkout now includes Dashboard, Character, Settings, the local wolf pack and the capture panel. Each service remains disconnected. A local permission-gated microphone can drive the mouth or detect a wake phrase. A detected phrase only shows a local confirmation. The release gates for PackGuard, provider policy and live scheduling still apply. See the [dated evidence and next hardware check](../research/native-preview-validation.md).
+
 ## First development slice
 
 1. Use synthetic art and a local sound file. Capture independent observations for sprite transparency, separate software audio capture, physical output, BlackHole and unplug while playing.

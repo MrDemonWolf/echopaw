@@ -1,36 +1,31 @@
 # EchoPaw for macOS
 
-The offline preview is a Swift 6 and SwiftUI app for Apple Silicon on macOS 15 or later. Its checked-in Xcode project and shared scheme follow the [WolfWave-based architecture](../../docs/architecture/native.md).
+EchoPaw is a Swift 6 and SwiftUI offline mascot preview for Apple Silicon Macs running macOS 15 or later.
 
 ## Build and run
-
-With full Xcode selected, run from the repository root:
 
 ```sh
 ./scripts/run-native.sh
 ```
 
-The script builds and opens the ad hoc-signed Debug app. If a previous build is open, quit it before rerunning the script to try the new binary.
+Quit a running older build first. This script builds the shared Xcode scheme and opens the local ad hoc-signed app.
 
-1. Start with the bundled blue wolf or open the Setup inspector and select **Import character…**. Choose a folder containing two identically sized static PNGs named `idle.png` and `talking.png`. Add aligned `blinking.png` and `talking-blinking.png` for optional blinking. EchoPaw keeps one local imported character. A successful reimport replaces the stored images together.
-2. Choose **System Default** or an explicit **Device** in Setup, set the volume, then select **Test output** below the stage. The mascot uses its talking pose during playback. **Stop test** ends the sound and leaves preview ready to play again.
-3. Select **Show mascot window** in the toolbar for the dedicated **EchoPaw Mascot** capture window. Turn on **Use green screen** in Setup to try OBS's Chroma Key filter.
-4. Select **Emergency stop** to stop the clip and latch mute. **Resume preview** restores the controls. Unmute explicitly before testing audio again.
+## Try the wolf
 
-The blue wolf has four aligned poses. **Auto-blink** controls the short, irregular blink. macOS Reduce Motion pauses it. Show or hide Setup using the toolbar or Control-Command-I.
+1. In **Dashboard**, choose **Preview talking**. A bundled sound drives the mouth. **Mute speech** stops the sound while idle blinking continues.
+2. In **Character**, choose **Preview blink**. The inspector imports a folder with `idle.png` and `talking.png`. Add `blinking.png` and `talking-blinking.png` for closed eyes. Reduce Motion pauses automatic blinks.
+3. Use **Choose output…** for System Default or an explicit device. A missing selection blocks playback until you choose a usable output.
+4. **Show mascot window** opens the sprite-only panel. Choose it in OBS window capture. **Emergency stop** closes it, stops sound and mic listening, and latches speech mute and AI pause. Resume and unmute deliberately.
 
-The preview uses a local test sound and does not request microphone or screen capture access. A connected OBS scene can still capture its window or sound. Rehearse in a local recording.
+Optional local mic controls live in Settings. The sample needs no microphone access, provider account or network service. **Window > Show component gallery** is available in Debug.
 
-## Run the unit tests
+## Development checks
 
 ```sh
+bun design-system/scripts/native-tokens.ts --check
 xcodebuild -project apps/native/EchoPaw.xcodeproj -scheme EchoPaw \
-  -destination 'platform=macOS,arch=arm64' \
+  -destination 'platform=macOS,arch=arm64' -parallel-testing-enabled NO \
   -derivedDataPath apps/native/DerivedData test
 ```
 
-## Capture and audio validation
-
-In OBS Studio 30 or later, add **macOS Screen Capture** in **Window Capture** mode and select **EchoPaw Mascot**. Compare transparent and green-screen modes against a contrasting background. Add a separate **macOS Audio Capture** source for EchoPaw and disable any overlapping window or desktop audio. Record one game sound and one EchoPaw test as separate sources. Repeat with an explicit physical device and a virtual device if available. Unplug the selected output during a test and check the app prompts for a deliberate route choice before the next playback.
-
-See the [audio-routing spec](../../docs/architecture/audio-routing.md) and [OBS capture guide](https://obsproject.com/kb/macos-desktop-audio-capture-guide). macOS 15 runtime, physical hotplug, BlackHole, OBS recording, and Developer ID distribution are separate validation steps.
+See the [native evidence](../../docs/research/native-preview-validation.md) and [art provenance](../../docs/research/starter-wolf-art.md).

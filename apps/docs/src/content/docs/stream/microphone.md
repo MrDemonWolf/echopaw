@@ -2,11 +2,8 @@
 title: Microphone activity reactions
 ---
 
-Activity reactions visually respond to your own speech. They start off. Audio for activity detection is processed on your Mac without transcription or cloud upload.
+Listening starts off each time EchoPaw opens. Open **Settings > Microphone**, choose **React to my voice**, then **Start listening**. On first use, macOS asks for microphone access. **System Default** works for first use. Once access is granted, stop listening to select another microphone.
 
-1. In **Microphone**, select your headset or another physical input.
-2. Turn on **Activity reactions** and respond to the macOS permission prompt. If denied, retry from System Settings after granting access.
-3. Speak normally, then leave a pause. Adjust the sensitivity until the activity meter follows your voice without reacting to room noise.
-4. Use **Stop listening** from the app or menu bar whenever you want to release the mic. A manual character reaction is available as an alternative.
+Speak, then pause. The mouth follows the input level locally. Activity detection does not transcribe, store or upload audio. EchoPaw ignores input during the test sound and briefly afterward.
 
-For voice commands, see [keyword listening](/stream/keyword/). The controls for activity and keywords are independent.
+**Stop listening** releases the mic. Find it in Settings, the workspace toolbar or the menu bar. If macOS denied access, allow EchoPaw in **System Settings > Privacy & Security > Microphone** and try again. [Optional wake phrase](/stream/keyword/)

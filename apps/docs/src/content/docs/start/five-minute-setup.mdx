@@ -1,17 +1,28 @@
 ---
 title: Five-minute setup
-description: Preview a mascot privately before connecting services.
+description: Try the starter wolf privately on a Mac.
 ---
 
+import { Image } from "astro:assets";
+import dashboard from "../../../../../../docs/onboarding/screenshots/native-dashboard-light.png";
 import SetupChecklist from "../../../components/SetupChecklist.astro";
 
-Use the native offline preview on Apple Silicon with macOS 15 or later. [Build it from source](/develop/installation/) or try the [browser interface preview](/start/interface-preview/).
+[Build EchoPaw from source](/develop/installation/) on an Apple Silicon Mac. You can rehearse with the starter wolf without accounts or microphone access.
+
+## Try the sample
+
+1. Open **Dashboard** and watch the wolf blink. Choose **Preview talking** to play a short local sound. The wolf opens its mouth with the sound.
+2. Open **Character** and choose **Preview blink** to see the closed-eye pose on demand. **Character inspector > Use starter wolf** restores the sample after a custom import.
+3. Choose **Dashboard > Choose output…** to adjust the volume or [pick an output](/stream/audio/).
+
+<Image src={dashboard} alt="Native Dashboard with the blue wolf, speech controls, output selection and disconnected services." />
+
+## Mute and stop
+
+**Mute speech** ends playback. Automatic blinking and optional microphone listening have their own controls. **Pause AI** changes whether automatic responses are allowed. Provider connections remain unavailable in this build.
+
+**Emergency stop** stops sound and listening, closes the capture panel and pauses AI. **Resume preview** restores controls. Choose **Unmute speech** and reopen the capture window yourself when ready.
 
 <SetupChecklist />
 
-1. Open EchoPaw. The mascot preview is local and needs no account or microphone permission. Practice off-stream because a configured OBS scene can still capture the visible mascot or test sound.
-2. Use the blue wolf or open Setup and choose a folder with your [two images](/character/images/). If a file is missing or mismatched, fix it and choose the folder again.
-3. Run **Test output** at a low volume and watch the mascot change poses. If it is silent, check your output device and the app's volume in Setup.
-4. Try **Emergency stop** during playback. Choose **Resume preview** and unmute before you play the next test.
-
-For a stream, continue with [OBS](/stream/obs/) or choose individual steps in [Advanced Setup](/start/advanced-setup/).
+A configured OBS scene may capture the mascot or sound during practice. [Set up OBS](/stream/obs/) or [import your own two PNGs](/character/import/).

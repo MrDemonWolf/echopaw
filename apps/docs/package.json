@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check",
+    "check": "bun ../../design-system/scripts/native-tokens.ts --check && astro check",
     "check:links": "bun scripts/check-links.ts"
   },
   "dependencies": {
