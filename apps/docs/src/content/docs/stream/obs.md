@@ -19,6 +19,6 @@ See the [OBS macOS capture guide](https://obsproject.com/kb/macos-desktop-audio-
 
 ## Troubleshoot the picture
 
-- **Controls or landscape in the recording**. Set the source to Window Capture and select **EchoPaw Mascot**. Application or display capture also includes the editor.
+- **Controls in the recording**. Set the source to Window Capture and select **EchoPaw Mascot**. Application or display capture also includes the editor.
 - **No mascot after an emergency stop**. Choose **Resume preview** and explicitly reopen the mascot window. Reselect the window in OBS if needed.
 - **Audio plays twice**. Disable the overlapping window, desktop or monitoring source, then record another local test.

@@ -8,6 +8,10 @@ November 20, 2026. Native implementation commits `d067d28` and `dab9fa8`. Tested
 - [OBS mascot-only recording](../onboarding/recordings/obs-mascot.mp4) and [closed-eye frame](../onboarding/screenshots/obs-mascot-blink.png). OBS Studio 33.0.1 used macOS Screen Capture in **Window Capture** mode, with its cursor disabled, over two independent color sources. All four recorded corners matched the respective background within one RGB level. The center retained the wolf. Over 330 video frames with Dashboard minimized, eye-region comparison found 321 open and nine closed frames across two blinks. The test used the transparent output with no key filter and silent OBS sources.
 - [Light Dashboard](../onboarding/screenshots/native-dashboard-light.png), [dark Dashboard](../onboarding/screenshots/native-dashboard-dark.png), [compact light layout](../onboarding/screenshots/native-compact-light.png) and [character inspector](../onboarding/screenshots/native-character-dark.png). Inspected full and compact windows down to 590 × 492 points. Playback buttons wrap at compact width.
 
+## Window and preview update
+
+The [updated Dashboard](../onboarding/screenshots/native-workspace.png) shows the sprite directly on the window surface. On macOS 27.0.1 a resize request to 300 × 240 points stopped at 760 × 532, including the title bar, on Dashboard and Character. Both preview buttons and the open Character inspector remained accessible. Control-Command-F left the workspace, Settings, component gallery and 512-point mascot panel windowed. A native rendering test checked transparent pixels on both sides of the wolf and an opaque pixel on its body.
+
 ## Interaction and isolation
 
 Fourteen Swift Testing cases passed in the hosted native target, including two-image import, malformed input, atomic replacement, cached pose selection, deterministic blink timing, cancelled callbacks, capture lifetime, missing route persistence, emergency stop and late microphone authorization.

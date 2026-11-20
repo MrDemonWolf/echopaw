@@ -16,13 +16,9 @@ enum BrandType {
 
 struct PreviewSurface: View {
     let session: PreviewSession
-    @Environment(\.colorScheme) private var scheme
-    @Environment(\.colorSchemeContrast) private var contrast
 
     var body: some View {
-        ZStack {
-            landscape
-                .accessibilityHidden(true)
+        Group {
             if let image = session.image {
                 Image(nsImage: image)
                     .resizable().scaledToFit()
@@ -32,40 +28,7 @@ struct PreviewSurface: View {
                 ContentUnavailableView("Choose a character", systemImage: "pawprint")
             }
         }
-        .frame(maxWidth: .infinity)
-        .clipShape(.rect(cornerRadius: EP.radiusPanel))
-        .overlay {
-            RoundedRectangle(cornerRadius: EP.radiusPanel)
-                .strokeBorder(.primary.opacity(contrast == .increased ? 0.7 : 0.13))
-                .allowsHitTesting(false)
-        }
-    }
-
-    private var landscape: some View {
-        let dark = scheme == .dark
-        return ZStack {
-            LinearGradient(colors: dark ? [EP.navy900, EP.navy700] : [EP.paper, EP.stageLight],
-                           startPoint: .top, endPoint: .bottomTrailing)
-            Canvas { context, size in
-                let w = size.width
-                let h = size.height
-                let peaks: [[CGFloat]] = [
-                    [0.73, 0.51, 0.66, 0.48, 0.78, 0.67, 0.53, 0.72, 0.48],
-                    [0.83, 0.73, 0.88, 0.74, 0.81, 0.67, 0.82, 0.70, 0.76]
-                ]
-                for (index, ridge) in peaks.enumerated() {
-                    var path = Path()
-                    path.move(to: CGPoint(x: 0, y: h))
-                    for (step, height) in ridge.enumerated() {
-                        path.addLine(to: CGPoint(x: w * CGFloat(step) / CGFloat(ridge.count - 1), y: height * h))
-                    }
-                    path.addLine(to: CGPoint(x: w, y: h))
-                    path.closeSubpath()
-                    let ink = dark ? EP.navy900 : EP.navy700
-                    context.fill(path, with: .color(ink.opacity(dark ? 0.24 + Double(index) * 0.16 : 0.06 + Double(index) * 0.04)))
-                }
-            }
-        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

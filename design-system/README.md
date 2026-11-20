@@ -9,11 +9,13 @@ bun design-system/scripts/native-tokens.ts --check
 
 The generator checks required colors and resolves CSS aliases. The docs check also fails on native token drift. Preserve native control sizes, system accent, focus rings and disabled labels. Branded surfaces use adaptive navy or paper, Montserrat headings and Roboto body. The font licenses travel with the app.
 
+Dashboard and Character share a resizable workspace with a 760 × 480 point content minimum. The workspace, Settings, gallery and mascot panel are windowed.
+
 ## Native components
 
 | Component | Use and states |
 | --- | --- |
-| Preview surface | Displays a cached pose on an adaptive landscape. The landscape belongs to the editor. The separate OBS panel draws the sprite alone. Increase Contrast strengthens the stage edge. Reduce Motion pauses automatic blinks. |
+| Preview surface | Draws just the cached pose. Transparent PNG pixels show the surrounding window surface on Dashboard, in Character and in the gallery. The separate OBS panel preserves transparency by default. Reduce Motion pauses automatic blinks. |
 | Status row | Pairs a symbol and service name with readable connection text. VoiceOver reads the row together. |
 | Session controls | Play the bundled sound, mute speech or pause automatic responses. Disabled controls reflect emergency stop, mute and unavailable routes. Resume leaves speech muted and AI paused. |
 | Device picker | Uses a native menu. Keeps a disconnected device selected and shows the recovery message next to playback settings. |

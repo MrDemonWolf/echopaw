@@ -58,7 +58,7 @@ struct DashboardView: View {
                 }
             }
         }
-        .frame(minWidth: 570, minHeight: 440)
+        .frame(minWidth: EP.workspaceMinWidth, minHeight: EP.workspaceMinHeight)
         .onAppear { session.setPreviewVisible(true) }
         .onDisappear { session.setPreviewVisible(false) }
         .onChange(of: session.isStopped) { _, stopped in

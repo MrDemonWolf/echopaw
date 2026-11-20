@@ -12,7 +12,6 @@ enum EP {
     static let warning = Color(red: 227/255.0, green: 160/255.0, blue: 8/255.0)
     static let danger = Color(red: 211/255.0, green: 58/255.0, blue: 58/255.0)
     static let info = Color(red: 23/255.0, green: 149/255.0, blue: 210/255.0)
-    static let stageLight = Color(red: 214/255.0, green: 234/255.0, blue: 246/255.0)
     static let paper = Color(red: 237/255.0, green: 244/255.0, blue: 251/255.0)
     static let ink = Color(red: 220/255.0, green: 233/255.0, blue: 247/255.0)
     static let bodyFamily = "Roboto"
@@ -25,6 +24,8 @@ enum EP {
     static let space3: CGFloat = 12
     static let space4: CGFloat = 16
     static let space6: CGFloat = 24
+    static let workspaceMinWidth: CGFloat = 760
+    static let workspaceMinHeight: CGFloat = 480
     static let stageMinHeight: CGFloat = 216
     static let sidebarWidth: CGFloat = 176
     static let inspectorWidth: CGFloat = 272

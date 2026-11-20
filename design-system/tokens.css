@@ -9,7 +9,6 @@
   --ep-warning: #e3a008;
   --ep-danger: #d33a3a;
   --ep-info: var(--ep-blue-500);
-  --ep-stage-light: #d6eaf6;
   --ep-paper: #edf4fb;
   --ep-ink: #dce9f7;
   --ep-body-family: "Roboto";
@@ -24,6 +23,8 @@
   --ep-space-3: 0.75rem;
   --ep-space-4: 1rem;
   --ep-space-6: 1.5rem;
+  --ep-workspace-min-width: 47.5rem;
+  --ep-workspace-min-height: 30rem;
   --ep-stage-min-height: 13.5rem;
   --ep-sidebar-width: 11rem;
   --ep-inspector-width: 17rem;

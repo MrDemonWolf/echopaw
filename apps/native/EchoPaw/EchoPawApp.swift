@@ -23,7 +23,9 @@ struct EchoPawApp: App {
     var body: some Scene {
         Window("EchoPaw", id: "dashboard") {
             DashboardView(session: session, mic: mic).preferredColorScheme(scheme)
+                .windowFullScreenBehavior(.disabled)
         }
+        .windowResizability(.contentMinSize)
         .defaultSize(width: 940, height: 710)
         .commands {
             InspectorCommands()
@@ -56,12 +58,15 @@ struct EchoPawApp: App {
 
         Settings {
             PreferencesView(session: session, mic: mic).preferredColorScheme(scheme)
+                .windowFullScreenBehavior(.disabled)
         }
 
         #if DEBUG
         Window("Component Gallery", id: "component-gallery") {
             ComponentGallery(session: session).preferredColorScheme(scheme)
+                .windowFullScreenBehavior(.disabled)
         }
+        .windowResizability(.contentMinSize)
         .defaultLaunchBehavior(.suppressed)
         #endif
 

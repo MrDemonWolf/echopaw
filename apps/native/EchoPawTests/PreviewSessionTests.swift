@@ -1,9 +1,21 @@
-import Foundation
+import SwiftUI
 import Testing
 @testable import EchoPaw
 
 @MainActor
 struct PreviewSessionTests {
+    @Test("The editor preview draws only the mascot")
+    func previewPreservesTransparency() throws {
+        let fixture = try Fixture()
+        defer { fixture.cleanUp() }
+        let renderer = ImageRenderer(content: PreviewSurface(session: fixture.session).frame(width: 360, height: 240))
+        let bitmap = try NSBitmapImageRep(cgImage: #require(renderer.cgImage))
+        #expect(bitmap.colorAt(x: 8, y: 120)?.alphaComponent == 0)
+        #expect(bitmap.colorAt(x: 352, y: 120)?.alphaComponent == 0)
+        let center = try #require(bitmap.colorAt(x: 180, y: 120))
+        #expect(center.alphaComponent > 0.9)
+    }
+
     @Test("Eye and mouth states compose, even while speech is muted")
     func independentEyesAndMouth() throws {
         let fixture = try Fixture()

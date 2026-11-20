@@ -47,6 +47,7 @@ final class MascotWindow: NSObject, NSWindowDelegate {
             backing: .buffered,
             defer: false
         )
+        panel.collectionBehavior = [.fullScreenNone, .fullScreenDisallowsTiling]
         panel.title = Self.title
         panel.isReleasedWhenClosed = false
         panel.isRestorable = false
